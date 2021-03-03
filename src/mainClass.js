@@ -1,27 +1,26 @@
-import { getData, getCategories } from './source';
+import { getData, getCategories } from "./source";
 
 export class AllItems {
-  constructor(searchCategory, showLinks) {
-    this.searchCategory = searchCategory;
-    this.showLinks = showLinks;
+  constructor(searchCategory, displayCategoryLink) {
+    this.allCategories = searchCategory; // searchCategory()
+    this.linksUpdate = displayCategoryLink; // displayCategoryLink()
     this.categories = [];
   }
 
   displayCategories() {
     getCategories().then((res) => {
       this.categories = res;
-      this.searchCategory(this.categories);
+      this.allCategories();
     });
   }
 
-  getCategoryItems(category) {
+  displayLinks(category) {
     getData(category).then((res) => {
-      res.map((el) => {
-        if (category === el.Category) {
-          this.showLinks(el);
-        }
-      });
+     this.linksUpdate(res, category);
     });
   }
 }
+
+let singletonInstance = new AllItems();
+export { singletonInstance };
 

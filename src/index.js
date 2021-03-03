@@ -1,19 +1,13 @@
-import { AllItems } from './mainClass';
-import { searchCategory } from './searchBar';
-import { updateUI_oneCategoryDisplay } from './displayItems';
-import { btnClear } from './btnFunctionality';
+import { searchCategory } from "./searchBar";
+import { displayCategoryLink } from "./displayUI";
+import { btnClear } from "./displayUI";
+import { singletonInstance } from './mainClass';
 
-export let all = new AllItems(
-  searchCategory,
-  updateUI_oneCategoryDisplay,
-);
+singletonInstance.allCategories = searchCategory;
+singletonInstance.linksUpdate = displayCategoryLink;
+singletonInstance.displayCategories();
 
-all.displayCategories();
-
-let btn = document.querySelector("#btnClear");
-
-btn.addEventListener("click", (e) => {
+document.querySelector("#btnClear").addEventListener("click", (e) => {
   e.preventDefault();
-
-  btnClear();
+  btnClear(singletonInstance);
 });

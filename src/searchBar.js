@@ -1,19 +1,20 @@
-import { updateUI_categoryPage } from './displayCategory';
-import { displayOne } from './displayOne';
+import { displayOneCategory } from "./displayUI";
+import { displayAllCategories } from "./displayUI";
+import { singletonInstance } from './mainClass';
 
+singletonInstance;
 //Search tab functionality
-export function searchCategory(arr) {
+export function searchCategory() {
   const searchBar = document.querySelector("#searchBar");
 
-  updateUI_categoryPage(arr);
-  console.log('44444');
+  displayAllCategories(singletonInstance);
 
   searchBar.addEventListener("input", (e) => {
     e.preventDefault();
     document.querySelector("#categories").innerHTML = "";
-    arr.filter((el) => {
+    singletonInstance.categories.forEach((el) => {
       if (el.toLowerCase().includes(e.target.value.toLowerCase())) {
-        displayOne(el);
+        displayOneCategory(el, singletonInstance);
       }
     });
   });

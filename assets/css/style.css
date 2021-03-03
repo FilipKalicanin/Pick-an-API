@@ -45,6 +45,26 @@ body {
     align-content: space-around;
 }
 
+.fas {
+    margin-left: .3rem;
+    color: rgb(187, 187, 108);
+}
+
+.fas:hover {
+    color: rgb(247, 176, 45);
+    transform: translateY(-1px);
+    transition: .1s;
+    cursor: pointer;
+}
+
+.svg-within-link {
+    position: absolute;
+    top: -1rem;
+    left: 85%;
+    font-size: 1.7rem;
+    color: rgb(247, 176, 45);
+}
+
 .category-item {
     border-radius: 25px;
     padding: 10px;
@@ -61,6 +81,7 @@ body {
     transition: .2s;
     cursor: pointer;
 }
+
 
 .search-section {
     display: flex;
@@ -145,6 +166,7 @@ body {
     padding: 10px;
     background-color: rgba(221, 255, 198, 0.637);
     border: 2px solid transparent;
+    position: relative;
 }
 
 .display-data:hover {
