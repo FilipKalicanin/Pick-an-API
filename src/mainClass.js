@@ -1,13 +1,24 @@
-import { getData, getCategories } from "./source";
+import { getData, getCategories, getAllLinks } from "./source";
 
 export class AllItems {
-  constructor(searchCategory, displayCategoryLink) {
+  constructor(searchCategory, displayCategoryLink, transform, searchLinks) {
     this.allCategories = searchCategory; // searchCategory()
     this.linksUpdate = displayCategoryLink; // displayCategoryLink()
+    this.transformLinks = transform;
+    this.searchThroughLinks = searchLinks;
     this.categories = [];
+    this.links = [];
   }
 
-  displayCategories() {
+  collectAllLinks() {
+    getAllLinks().then(res => {
+      this.links = res;
+      this.transformLinks();
+      this.searchThroughLinks();
+    })
+  }
+
+  collectAllCategories() {
     getCategories().then((res) => {
       this.categories = res;
       this.allCategories();
@@ -16,11 +27,11 @@ export class AllItems {
 
   displayLinks(category) {
     getData(category).then((res) => {
-     this.linksUpdate(res, category);
+      this.linksUpdate(res, category);
     });
   }
 }
 
-let singletonInstance = new AllItems();
-export { singletonInstance };
+let instanceOfMainClass = new AllItems();
+export { instanceOfMainClass };
 

@@ -1,13 +1,13 @@
-import { searchCategory } from "./searchBar";
-import { displayCategoryLink } from "./displayUI";
-import { btnClear } from "./displayUI";
-import { singletonInstance } from './mainClass';
+import { displayCategoryLink, searchCategory, searchLinks } from "./displayUI";
+import { instanceOfMainClass } from './mainClass';
+import { transform } from './transform';
 
-singletonInstance.allCategories = searchCategory;
-singletonInstance.linksUpdate = displayCategoryLink;
-singletonInstance.displayCategories();
+instanceOfMainClass.allCategories = searchCategory;
+instanceOfMainClass.searchThroughLinks = searchLinks;
+instanceOfMainClass.linksUpdate = displayCategoryLink;
+instanceOfMainClass.transformLinks = transform;
 
-document.querySelector("#btnClear").addEventListener("click", (e) => {
-  e.preventDefault();
-  btnClear(singletonInstance);
-});
+// Initial call of method displayCategories() in order to fill this.categories;
+instanceOfMainClass.collectAllCategories();
+// Initial call of method collectAllLinks() in order to fill this.links;
+instanceOfMainClass.collectAllLinks();
