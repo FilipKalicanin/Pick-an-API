@@ -1,9 +1,9 @@
 import { getData, getCategories, getAllLinks } from "./source";
 
 export class AllItems {
-  constructor(searchCategory, displayCategoryLink, transform, searchLinks) {
+  constructor(searchCategory, displayAllLinks, transform, searchLinks) {
     this.allCategories = searchCategory; // searchCategory()
-    this.linksUpdate = displayCategoryLink; // displayCategoryLink()
+    this.linksUpdate = displayAllLinks; // displayCategoryLink()
     this.transformLinks = transform;
     this.searchThroughLinks = searchLinks;
     this.categories = [];

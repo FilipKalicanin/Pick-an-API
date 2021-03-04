@@ -79,7 +79,7 @@ export function displayOneLink(link) {
 }
 
 // Display of all Link elements
-export function displayCategoryLink(arrayOfLinks, category) {
+export function displayAllLinks(arrayOfLinks, category) {
   arrayOfLinks.forEach(link => {
     if (category === link.Category) {
       displayOneLink(link);
@@ -101,7 +101,7 @@ export function searchCategory() {
     document.querySelector("#categories").innerHTML = "";
     instanceOfMainClass.categories.forEach((el) => {
       if (el.toLowerCase().includes(e.target.value.toLowerCase())) {
-        displayOneCategory(el, instanceOfMainClass);
+        displayOneCategory(el);
       }
     });
   });
@@ -113,52 +113,41 @@ export function searchLinks() {
 
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
-    
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-
     instanceOfMainClass.links.forEach((el) => {
       if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
         displayOneLink(el);
       }
     });
+
   });
 }
 
 //btnClear for Category search
 export function btnClear() {
   let searchContent = document.querySelector("#searchBar");
-
-  if (searchContent.value !== "") {
     searchContent.value = "";
     document.querySelector("#categories").innerHTML = "";
-  } else {
-    searchContent.value = "";
-    document.querySelector("#categories").innerHTML = "";
-  }
+  
 }
 
 //btnClear for Links search
 export function btnClearLinks() {
   let searchContent = document.querySelector("#searchBarLinks");
-
-  if (searchContent.value !== "") {
     searchContent.value = "";
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-  } else {
-    searchContent.value = "";
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-  }
+  
 }
 
 // initialization of btnClear for Category
 document.querySelector("#btnClear").addEventListener("click", (e) => {
   e.preventDefault();
-  btnClear(instanceOfMainClass);
+  btnClear();
 });
 
 // initialization of btnClear for Links
 document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
   e.preventDefault();
-  btnClearLinks(instanceOfMainClass);
+  btnClearLinks();
 });
 

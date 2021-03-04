@@ -1,10 +1,10 @@
-import { displayCategoryLink, searchCategory, searchLinks } from "./displayUI";
+import { displayAllLinks, searchCategory, searchLinks } from "./displayUI";
 import { instanceOfMainClass } from './mainClass';
 import { transform } from './transform';
 
 instanceOfMainClass.allCategories = searchCategory;
 instanceOfMainClass.searchThroughLinks = searchLinks;
-instanceOfMainClass.linksUpdate = displayCategoryLink;
+instanceOfMainClass.linksUpdate = displayAllLinks;
 instanceOfMainClass.transformLinks = transform;
 
 // Initial call of method displayCategories() in order to fill this.categories;
