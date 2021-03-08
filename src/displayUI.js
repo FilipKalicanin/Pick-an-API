@@ -1,12 +1,12 @@
 import { instanceOfMainClass } from './mainClass';
 
 // Display one Category element
-export function displayOneCategory(categoryName) {
+export function displayOneCategory(categoryElement) {
   let category = document.createElement('div');
   category.className = 'category-main';
 
   let categoryItem = document.createElement("div");
-  categoryItem.textContent = categoryName;
+  categoryItem.textContent = categoryElement.name;
   categoryItem.id = "categoryItem";
 
   let categoryItemSvg = document.createElement('div');
@@ -20,9 +20,9 @@ export function displayOneCategory(categoryName) {
   categoryItem.addEventListener("click", (e) => {
     e.preventDefault();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-    let firstWord = categoryName;
-    firstWord.split(" ")[0];
-    instanceOfMainClass.displayLinks(firstWord);
+    let firstWord = categoryElement.name;
+    let parameter = firstWord.split(" ")[0];
+    instanceOfMainClass.displayLinks(parameter);
   });
 
   category.append(categoryItem, categoryItemSvg)
@@ -79,11 +79,9 @@ export function displayOneLink(link) {
 }
 
 // Display of all Link elements
-export function displayAllLinks(arrayOfLinks, category) {
+export function displayLinksForChosenCategory(arrayOfLinks) {
   arrayOfLinks.forEach(link => {
-    if (category === link.Category) {
-      displayOneLink(link);
-    }
+    displayOneLink(link);
   })
 }
 
@@ -96,14 +94,15 @@ function changeColor(el) {
 export function searchCategory() {
   const searchBar = document.querySelector("#searchBar");
 
+  displayAllCategories();
+
   searchBar.addEventListener("input", (e) => {
     e.preventDefault();
     document.querySelector("#categories").innerHTML = "";
-    instanceOfMainClass.categories.forEach((el) => {
-      if (el.toLowerCase().includes(e.target.value.toLowerCase())) {
-        displayOneCategory(el);
-      }
-    });
+
+    instanceOfMainClass.searchCategories(e).forEach(el => {
+      displayOneCategory(el);
+    })
   });
 }
 
@@ -114,29 +113,26 @@ export function searchLinks() {
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-    instanceOfMainClass.links.forEach((el) => {
-      if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
-        displayOneLink(el);
-      }
-    });
 
+    instanceOfMainClass.searchLinks(e).forEach(el => {
+      displayOneLink(el);
+    })
   });
 }
 
 //btnClear for Category search
 export function btnClear() {
   let searchContent = document.querySelector("#searchBar");
-    searchContent.value = "";
-    document.querySelector("#categories").innerHTML = "";
-  
+  searchContent.value = "";
+  document.querySelector("#categories").innerHTML = "";
+  displayAllCategories();
 }
 
 //btnClear for Links search
 export function btnClearLinks() {
   let searchContent = document.querySelector("#searchBarLinks");
-    searchContent.value = "";
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-  
+  searchContent.value = "";
+  document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
 }
 
 // initialization of btnClear for Category

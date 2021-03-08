@@ -59,7 +59,7 @@ body {
 }
 
 .category-main:hover {
-    box-shadow: 2px 7px 7px rgba(54, 54, 54, 0.4);
+    box-shadow: 2px 7px 7px rgba(247, 176, 45, 0.4);
     border: 2px solid rgb(247, 176, 45);
     transition: .2s;
     cursor: pointer;
@@ -72,20 +72,21 @@ body {
 
 .fas:hover {
     transform: translateY(-1px);
-    transition: .1s;
+    transition: .2s;
     cursor: pointer;
+    font-size: 150%;
 }
 
 .svg-within-link {
     position: absolute;
     top: -1rem;
     left: 85%;
-    font-size: 1.7rem;
+    font-size: 1.8rem;
     color: rgb(247, 176, 45);
 }
 
 .mark-important {
-    color: rgb(238, 69, 17);
+    color: rgb(0, 184, 245);
 }
 
 .search-section {

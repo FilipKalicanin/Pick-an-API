@@ -1,13 +1,13 @@
-import { displayAllLinks, searchCategory, searchLinks } from "./displayUI";
 import { instanceOfMainClass } from './mainClass';
-import { transform } from './transform';
+import { searchCategory, searchLinks, displayLinksForChosenCategory } from "./displayUI";
 
-instanceOfMainClass.allCategories = searchCategory;
+instanceOfMainClass.searchThroughCategories = searchCategory;
 instanceOfMainClass.searchThroughLinks = searchLinks;
-instanceOfMainClass.linksUpdate = displayAllLinks;
-instanceOfMainClass.transformLinks = transform;
+instanceOfMainClass.displayChosenLinks = displayLinksForChosenCategory;
 
-// Initial call of method displayCategories() in order to fill this.categories;
+// instanceOfMainClass.setData(searchLinks, searchCategory, displayLinksForChosenCategory);
+
+// Initial call of method displayCategories() in order to fill and transform this.categories;
 instanceOfMainClass.collectAllCategories();
-// Initial call of method collectAllLinks() in order to fill this.links;
+// Initial call of method collectAllLinks() in order to fill and transform this.links;
 instanceOfMainClass.collectAllLinks();
