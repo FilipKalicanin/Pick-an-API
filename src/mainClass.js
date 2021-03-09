@@ -1,15 +1,29 @@
 import { getData, getAllCategories } from "./source";
 
 export class AllItems {
-  setData(searchCategory, searchLinks, displayLinksForChosenCategory) {
+
+  setData(searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly) {
     this.searchThroughCategories = searchCategory;
     this.searchThroughLinks = searchLinks;
     this.displayChosenLinks = displayLinksForChosenCategory;
     this.categories = [];
     this.filteredCategoriesAfterSearch = [];
     this.links = [];
-    this.filteredLinksAfterSearch = [];
+    this.filteredLinksAfterSearch = []; // for Search of all links
+    this.chosenLinks = [];
+    this.searchOfChosenLinks = searchChosenLinksOnly;
   }
+
+  //SET(?)
+
+  getCategories() {
+    return this.categories;
+  }
+
+  // setCategories(arr) {
+  //   this.categories = arr;
+
+  // }
 
   // CATEGORIES
 
@@ -53,7 +67,7 @@ export class AllItems {
   }
 
   // search functionality for Links; this method is called in displayUI for display
-  searchLinks(e) {
+  searchAllLinks(e) {
     this.filteredLinksAfterSearch = this.links.filter(el => {
       if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
         return el;
@@ -64,11 +78,22 @@ export class AllItems {
 
   // this method is called within displayUI module
   displayLinks(category) {
-    // Click on specific category will pass category name to this method which will retreive data and display all Links for chosen category
     getData(category).then((res) => {
       this.displayChosenLinks(res);
-    });
+      this.chosenLinks = res;
+      this.searchOfChosenLinks();
+    })
   }
+
+  searchChosenLinks(e) {
+    this.filteredLinksAfterSearch = this.chosenLinks.filter(el => {
+      if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
+        return el;
+      }
+    })
+    return this.filteredLinksAfterSearch;
+  }
+
 
   transformLink() {
     this.links.forEach(el => {

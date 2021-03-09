@@ -114,7 +114,20 @@ export function searchLinks() {
     e.preventDefault();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
 
-    instanceOfMainClass.searchLinks(e).forEach(el => {
+    instanceOfMainClass.searchAllLinks(e).forEach(el => {
+      displayOneLink(el);
+    })
+  });
+}
+
+export function searchChosenLinksOnly() {
+  const searchBarLinks = document.querySelector("#searchBarLinks");
+
+  searchBarLinks.addEventListener("input", (e) => {
+    e.preventDefault();
+    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
+
+    instanceOfMainClass.searchChosenLinks(e).forEach(el => {
       displayOneLink(el);
     })
   });
@@ -133,6 +146,8 @@ export function btnClearLinks() {
   let searchContent = document.querySelector("#searchBarLinks");
   searchContent.value = "";
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
+  instanceOfMainClass.chosenLinks = [];
+  instanceOfMainClass.collectAllLinks();
 }
 
 // initialization of btnClear for Category
