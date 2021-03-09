@@ -2,28 +2,31 @@ import { getData, getAllCategories } from "./source";
 
 export class AllItems {
 
-  setData(searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly) {
-    this.searchThroughCategories = searchCategory;
-    this.searchThroughLinks = searchLinks;
-    this.displayChosenLinks = displayLinksForChosenCategory;
+  constructor(searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly) {
     this.categories = [];
-    this.filteredCategoriesAfterSearch = [];
+    this.onReceivedCategories = searchCategory;
+    this.displayChosenLinks = displayLinksForChosenCategory;
     this.links = [];
-    this.filteredLinksAfterSearch = []; // for Search of all links
+    this.onReceivedLinks = searchLinks;
     this.chosenLinks = [];
-    this.searchOfChosenLinks = searchChosenLinksOnly;
+    this.onReceivedChosenLinks = searchChosenLinksOnly;
   }
 
-  //SET(?)
-
-  getCategories() {
-    return this.categories;
+  setOnCategoriesReceived(onReceivedCategories) { 
+    this.onReceivedCategories = onReceivedCategories 
   }
 
-  // setCategories(arr) {
-  //   this.categories = arr;
+  setOnLinksReceived(onReceivedLinks) {
+    this.onReceivedLinks = onReceivedLinks;
+  }
 
-  // }
+  setOnChosenLinksReceived(onReceivedChosenLinks) {
+    this.onReceivedChosenLinks = onReceivedChosenLinks;
+  }
+
+  setDisplayChosenLinks(displayChosenLinks) {
+    this.displayChosenLinks = displayChosenLinks;
+  }
 
   // CATEGORIES
 
@@ -32,18 +35,18 @@ export class AllItems {
       //fill this.categories and add mark-as-important feature
       this.transformCategories(res);
       //initialize search option
-      this.searchThroughCategories();
+      this.onReceivedCategories();
     });
   }
 
   // search functionality for categories; this method is called in displayUI for display
   searchCategories(e) {
-    this.filteredCategoriesAfterSearch = this.categories.filter(el => {
+    let filteredCategoriesAfterSearch = this.categories.filter(el => {
       if (el.name.toLowerCase().includes(e.target.value.toLowerCase())) {
         return el;
       }
     })
-    return this.filteredCategoriesAfterSearch;
+    return filteredCategoriesAfterSearch;
   }
 
   // method that adds "important: false" to category
@@ -62,18 +65,18 @@ export class AllItems {
       //add mark-as-important feature
       this.transformLink();
       //initialize search option
-      this.searchThroughLinks();
+      this.onReceivedLinks();
     })
   }
 
   // search functionality for Links; this method is called in displayUI for display
   searchAllLinks(e) {
-    this.filteredLinksAfterSearch = this.links.filter(el => {
+    let filteredLinksAfterSearch = this.links.filter(el => {
       if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
         return el;
       }
     })
-    return this.filteredLinksAfterSearch;
+    return filteredLinksAfterSearch;
   }
 
   // this method is called within displayUI module
@@ -81,17 +84,17 @@ export class AllItems {
     getData(category).then((res) => {
       this.displayChosenLinks(res);
       this.chosenLinks = res;
-      this.searchOfChosenLinks();
+      this.onReceivedChosenLinks();
     })
   }
 
   searchChosenLinks(e) {
-    this.filteredLinksAfterSearch = this.chosenLinks.filter(el => {
+     let filteredChosenLinksAfterSearch = this.chosenLinks.filter(el => {
       if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
         return el;
       }
     })
-    return this.filteredLinksAfterSearch;
+    return filteredChosenLinksAfterSearch;
   }
 
 

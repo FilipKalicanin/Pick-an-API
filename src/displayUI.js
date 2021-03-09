@@ -146,7 +146,6 @@ export function btnClearLinks() {
   let searchContent = document.querySelector("#searchBarLinks");
   searchContent.value = "";
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-  instanceOfMainClass.chosenLinks = [];
   instanceOfMainClass.collectAllLinks();
 }
 
@@ -161,4 +160,5 @@ document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
   e.preventDefault();
   btnClearLinks();
 });
+
 

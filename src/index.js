@@ -1,12 +1,10 @@
 import { instanceOfMainClass } from './mainClass';
 import { searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly } from "./displayUI";
 
-instanceOfMainClass.searchThroughCategories = searchCategory;
-instanceOfMainClass.searchThroughLinks = searchLinks;
-instanceOfMainClass.displayChosenLinks = displayLinksForChosenCategory;
-instanceOfMainClass.searchOfChosenLinks = searchChosenLinksOnly;
-
-// instanceOfMainClass.setData(searchLinks, searchCategory, displayLinksForChosenCategory);
+instanceOfMainClass.setOnCategoriesReceived(searchCategory);
+instanceOfMainClass.setOnLinksReceived(searchLinks);
+instanceOfMainClass.setOnChosenLinksReceived(searchChosenLinksOnly);
+instanceOfMainClass.setDisplayChosenLinks(displayLinksForChosenCategory);
 
 // Initial call of method displayCategories() in order to fill and transform this.categories;
 instanceOfMainClass.collectAllCategories();

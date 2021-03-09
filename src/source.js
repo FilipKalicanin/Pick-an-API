@@ -2,39 +2,22 @@
 
 export function getData(category) {
 
-  if (category) {
-    return fetch(`https://api.publicapis.org/entries?category=${category}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`${res.status}`);
-        } else {
-          return res.json();
-        }
-      })
-      .then((res) => {
-        return res.entries;
-      })
-      .catch((er) => {
-        console.log(er);
-      });
-  }
+  const categoryQuery = category ? `?category=${category}` : '';
 
-  if (category === null || category === undefined) {
-    return fetch(`https://api.publicapis.org/entries`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`${res.status}`);
-        } else {
-          return res.json();
-        }
-      })
-      .then((res) => {
-        return res.entries;
-      })
-      .catch((er) => {
-        console.log(er);
-      });
-  }
+  return fetch(`https://api.publicapis.org/entries${categoryQuery}`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`${res.status}`);
+      } else {
+        return res.json();
+      }
+    })
+    .then((res) => {
+      return res.entries;
+    })
+    .catch((er) => {
+      console.log(er);
+    });
 }
 
 export function getAllCategories() {
