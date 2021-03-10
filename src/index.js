@@ -1,9 +1,8 @@
 import { instanceOfMainClass } from './mainClass';
-import { searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly } from "./displayUI";
+import { searchCategory, searchLinks, displayLinksForChosenCategory } from "./displayUI";
 
 instanceOfMainClass.setOnCategoriesReceived(searchCategory);
 instanceOfMainClass.setOnLinksReceived(searchLinks);
-instanceOfMainClass.setOnChosenLinksReceived(searchChosenLinksOnly);
 instanceOfMainClass.setDisplayChosenLinks(displayLinksForChosenCategory);
 
 // Initial call of method displayCategories() in order to fill and transform this.categories;

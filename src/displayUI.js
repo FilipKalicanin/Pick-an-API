@@ -120,19 +120,6 @@ export function searchLinks() {
   });
 }
 
-export function searchChosenLinksOnly() {
-  const searchBarLinks = document.querySelector("#searchBarLinks");
-
-  searchBarLinks.addEventListener("input", (e) => {
-    e.preventDefault();
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-
-    instanceOfMainClass.searchChosenLinks(e).forEach(el => {
-      displayOneLink(el);
-    })
-  });
-}
-
 //btnClear for Category search
 export function btnClear() {
   let searchContent = document.querySelector("#searchBar");

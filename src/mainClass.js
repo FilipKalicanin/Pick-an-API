@@ -2,26 +2,20 @@ import { getData, getAllCategories } from "./source";
 
 export class AllItems {
 
-  constructor(searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly) {
+  constructor(searchCategory, searchLinks, displayLinksForChosenCategory) {
     this.categories = [];
     this.onReceivedCategories = searchCategory;
     this.displayChosenLinks = displayLinksForChosenCategory;
     this.links = [];
     this.onReceivedLinks = searchLinks;
-    this.chosenLinks = [];
-    this.onReceivedChosenLinks = searchChosenLinksOnly;
   }
 
-  setOnCategoriesReceived(onReceivedCategories) { 
-    this.onReceivedCategories = onReceivedCategories 
+  setOnCategoriesReceived(onReceivedCategories) {
+    this.onReceivedCategories = onReceivedCategories
   }
 
   setOnLinksReceived(onReceivedLinks) {
     this.onReceivedLinks = onReceivedLinks;
-  }
-
-  setOnChosenLinksReceived(onReceivedChosenLinks) {
-    this.onReceivedChosenLinks = onReceivedChosenLinks;
   }
 
   setDisplayChosenLinks(displayChosenLinks) {
@@ -83,20 +77,10 @@ export class AllItems {
   displayLinks(category) {
     getData(category).then((res) => {
       this.displayChosenLinks(res);
-      this.chosenLinks = res;
-      this.onReceivedChosenLinks();
+      this.links = res;
+      this.onReceivedLinks(category);
     })
   }
-
-  searchChosenLinks(e) {
-     let filteredChosenLinksAfterSearch = this.chosenLinks.filter(el => {
-      if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
-        return el;
-      }
-    })
-    return filteredChosenLinksAfterSearch;
-  }
-
 
   transformLink() {
     this.links.forEach(el => {
