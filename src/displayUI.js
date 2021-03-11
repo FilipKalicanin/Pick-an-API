@@ -15,6 +15,8 @@ export function displayOneCategory(categoryElement) {
   categoryItemSvg.addEventListener('click', (e) => {
     e.preventDefault();
     changeColor(categoryItemSvg);
+    instanceOfMainClass.markAsImportant(categoryElement);
+    instanceOfMainClass.updateStorageCategories();
   })
 
   categoryItem.addEventListener("click", (e) => {
@@ -23,6 +25,7 @@ export function displayOneCategory(categoryElement) {
     let firstWord = categoryElement.name;
     let parameter = firstWord.split(" ")[0];
     instanceOfMainClass.displayLinks(parameter);
+    instanceOfMainClass.setFiltered(parameter);
   });
 
   category.append(categoryItem, categoryItemSvg)
@@ -47,6 +50,8 @@ export function displayOneLink(link) {
   param_svg.addEventListener('click', (e) => {
     e.preventDefault();
     changeColor(param_svg);
+    instanceOfMainClass.markAsImportant(link);
+    instanceOfMainClass.updateStorageLinks();
   })
 
   let param_api = document.createElement("p");
@@ -70,7 +75,6 @@ export function displayOneLink(link) {
   individuals.append(
     param_svg,
     param_api,
-    param_category,
     param_category,
     param_description,
     param_link
@@ -114,7 +118,7 @@ export function searchLinks() {
     e.preventDefault();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
 
-    instanceOfMainClass.searchAllLinks(e).forEach(el => {
+    instanceOfMainClass.getAllLinks(instanceOfMainClass.filtered, e).forEach(el => {
       displayOneLink(el);
     })
   });
