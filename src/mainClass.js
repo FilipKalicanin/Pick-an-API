@@ -47,21 +47,18 @@ export class AllItems {
     this.textFilter = param;
   }
 
-  getAllLinks(target) {
+  getAllLinks(targetValue) {
     if (this.textFilter !== null) {
       let filteredCategoriesAfterSearch = this.links.filter(el => {
-        if (el.API.toLowerCase().includes(target.value.toLowerCase())) {
+        if (el.API.toLowerCase().includes(targetValue)) {
           return el;
         }
       })
       return filteredCategoriesAfterSearch;
     } else {
-      let filteredCategoriesAfterSearch = this.links.filter(el => {
-        if (el.API.toLowerCase().includes(target.value.toLowerCase())) {
-          return el;
-        }
-      })
-      return filteredCategoriesAfterSearch;
+
+      return this.links;
+      
     }
   }
 
@@ -74,9 +71,9 @@ export class AllItems {
     });
   }
 
-  searchCategories(target) {
+  searchCategories(targetValue) {
     let filteredCategoriesAfterSearch = this.categories.filter(el => {
-      if (el.name.toLowerCase().includes(target.value.toLowerCase())) {
+      if (el.name.toLowerCase().includes(targetValue)) {
         return el;
       }
     })
@@ -99,9 +96,9 @@ export class AllItems {
     })
   }
 
-  searchAllLinks(target) {
+  searchAllLinks(targetValue) {
     let filteredLinksAfterSearch = this.links.filter(el => {
-      if (el.API.toLowerCase().includes(target.value.toLowerCase())) {
+      if (el.API.toLowerCase().includes(targetValue)) {
         return el;
       }
     })

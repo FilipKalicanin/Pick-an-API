@@ -100,10 +100,10 @@ export function searchCategory() {
 
   searchBar.addEventListener("input", (e) => {
     e.preventDefault();
-    let target = e.target;
+    let targetValue = e.target.value.toLowerCase();
     document.querySelector("#categories").innerHTML = "";
 
-    instanceOfMainClass.searchCategories(target).forEach(el => {
+    instanceOfMainClass.searchCategories(targetValue).forEach(el => {
       displayOneCategory(el);
     })
   });
@@ -115,10 +115,10 @@ export function searchLinks() {
 
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
-    let target = e.target;
+    let targetValue = e.target.value.toLowerCase();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
 
-    instanceOfMainClass.getAllLinks(target).forEach(el => {
+    instanceOfMainClass.getAllLinks(targetValue).forEach(el => {
       displayOneLink(el);
     })
   });
