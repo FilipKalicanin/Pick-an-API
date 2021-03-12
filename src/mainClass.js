@@ -10,7 +10,7 @@ export class AllItems {
     this.onReceivedLinks = searchLinks;
     this.storageLinks = JSON.parse(localStorage.getItem('links'));
     this.storageCategories = JSON.parse(localStorage.getItem('categories'));
-    this.filtered;
+    this.textFilter;
   }
 
   setOnCategoriesReceived(onReceivedCategories) {
@@ -39,23 +39,25 @@ export class AllItems {
     } else {
       el.important = false;
     }
+    this.updateStorageCategories();
+    this.updateStorageLinks();
   }
 
-  setFiltered(param) {
-    this.filtered = param;
+  setTextFilter(param) {
+    this.textFilter = param;
   }
 
-  getAllLinks(filtered, e) {
-    if (filtered !== null) {
+  getAllLinks(target) {
+    if (this.textFilter !== null) {
       let filteredCategoriesAfterSearch = this.links.filter(el => {
-        if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
+        if (el.API.toLowerCase().includes(target.value.toLowerCase())) {
           return el;
         }
       })
       return filteredCategoriesAfterSearch;
     } else {
       let filteredCategoriesAfterSearch = this.links.filter(el => {
-        if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
+        if (el.API.toLowerCase().includes(target.value.toLowerCase())) {
           return el;
         }
       })
@@ -72,9 +74,9 @@ export class AllItems {
     });
   }
 
-  searchCategories(e) {
+  searchCategories(target) {
     let filteredCategoriesAfterSearch = this.categories.filter(el => {
-      if (el.name.toLowerCase().includes(e.target.value.toLowerCase())) {
+      if (el.name.toLowerCase().includes(target.value.toLowerCase())) {
         return el;
       }
     })
@@ -97,9 +99,9 @@ export class AllItems {
     })
   }
 
-  searchAllLinks(e) {
+  searchAllLinks(target) {
     let filteredLinksAfterSearch = this.links.filter(el => {
-      if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
+      if (el.API.toLowerCase().includes(target.value.toLowerCase())) {
         return el;
       }
     })
