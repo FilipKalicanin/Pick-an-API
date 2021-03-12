@@ -15,6 +15,7 @@ export function displayOneCategory(categoryElement) {
   categoryItemSvg.addEventListener('click', (e) => {
     e.preventDefault();
     changeColor(categoryItemSvg);
+    instanceOfMainClass.markAsImportant(categoryElement);
   })
 
   categoryItem.addEventListener("click", (e) => {
@@ -23,6 +24,7 @@ export function displayOneCategory(categoryElement) {
     let firstWord = categoryElement.name;
     let parameter = firstWord.split(" ")[0];
     instanceOfMainClass.displayLinks(parameter);
+    instanceOfMainClass.setTextFilter(parameter);
   });
 
   category.append(categoryItem, categoryItemSvg)
@@ -41,39 +43,39 @@ export function displayOneLink(link) {
   let individuals = document.createElement("div");
   individuals.className = "display-data";
 
-  let param_svg = document.createElement('div');
-  param_svg.className = "fas fa-star svg-within-link";
+  let paramSvg = document.createElement('div');
+  paramSvg.className = "fas fa-star svg-within-link";
 
-  param_svg.addEventListener('click', (e) => {
+  paramSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    changeColor(param_svg);
+    changeColor(paramSvg);
+    instanceOfMainClass.markAsImportant(link);
   })
 
-  let param_api = document.createElement("p");
-  param_api.className = "display-data-p";
-  param_api.textContent = `API: ${link.API}`;
+  let paramApi = document.createElement("p");
+  paramApi.className = "display-data-p";
+  paramApi.textContent = `API: ${link.API}`;
 
-  let param_category = document.createElement("p");
-  param_category.className = "display-data-p";
-  param_category.textContent = `Category: ${link.Category}`;
+  let paramCategory = document.createElement("p");
+  paramCategory.className = "display-data-p";
+  paramCategory.textContent = `Category: ${link.Category}`;
 
-  let param_description = document.createElement("p");
-  param_description.className = "display-data-p";
-  param_description.textContent = `Description: ${link.Description}`;
+  let paramDescription = document.createElement("p");
+  paramDescription.className = "display-data-p";
+  paramDescription.textContent = `Description: ${link.Description}`;
 
-  let param_link = document.createElement("a");
-  param_link.className = "display-data-p";
-  param_link.href = link.Link;
-  param_link.target = "_blank";
-  param_link.textContent = "Link to an API webpage";
+  let paramLink = document.createElement("a");
+  paramLink.className = "display-data-p";
+  paramLink.href = link.Link;
+  paramLink.target = "_blank";
+  paramLink.textContent = "Link to an API webpage";
 
   individuals.append(
-    param_svg,
-    param_api,
-    param_category,
-    param_category,
-    param_description,
-    param_link
+    paramSvg,
+    paramApi,
+    paramCategory,
+    paramDescription,
+    paramLink
   );
   document.querySelector("#oneCategoryDisplayBox").append(individuals);
 }
@@ -98,9 +100,10 @@ export function searchCategory() {
 
   searchBar.addEventListener("input", (e) => {
     e.preventDefault();
+    let targetValue = e.target.value.toLowerCase();
     document.querySelector("#categories").innerHTML = "";
 
-    instanceOfMainClass.searchCategories(e).forEach(el => {
+    instanceOfMainClass.searchCategories(targetValue).forEach(el => {
       displayOneCategory(el);
     })
   });
@@ -112,22 +115,10 @@ export function searchLinks() {
 
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
+    let targetValue = e.target.value.toLowerCase();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
 
-    instanceOfMainClass.searchAllLinks(e).forEach(el => {
-      displayOneLink(el);
-    })
-  });
-}
-
-export function searchChosenLinksOnly() {
-  const searchBarLinks = document.querySelector("#searchBarLinks");
-
-  searchBarLinks.addEventListener("input", (e) => {
-    e.preventDefault();
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-
-    instanceOfMainClass.searchChosenLinks(e).forEach(el => {
+    instanceOfMainClass.getAllLinks(targetValue).forEach(el => {
       displayOneLink(el);
     })
   });

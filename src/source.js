@@ -1,5 +1,3 @@
-//Create function to do getData(category) and and getAllLinks() based on paremeter
-
 export function getData(category) {
 
   const categoryQuery = category ? `?category=${category}` : '';

@@ -2,54 +2,84 @@ import { getData, getAllCategories } from "./source";
 
 export class AllItems {
 
-  constructor(searchCategory, searchLinks, displayLinksForChosenCategory, searchChosenLinksOnly) {
+  constructor(searchCategory, searchLinks, displayLinksForChosenCategory) {
     this.categories = [];
     this.onReceivedCategories = searchCategory;
     this.displayChosenLinks = displayLinksForChosenCategory;
     this.links = [];
     this.onReceivedLinks = searchLinks;
-    this.chosenLinks = [];
-    this.onReceivedChosenLinks = searchChosenLinksOnly;
+    this.storageLinks = JSON.parse(localStorage.getItem('links'));
+    this.storageCategories = JSON.parse(localStorage.getItem('categories'));
+    this.textFilter;
   }
 
-  setOnCategoriesReceived(onReceivedCategories) { 
-    this.onReceivedCategories = onReceivedCategories 
+  setOnCategoriesReceived(onReceivedCategories) {
+    this.onReceivedCategories = onReceivedCategories
   }
 
   setOnLinksReceived(onReceivedLinks) {
     this.onReceivedLinks = onReceivedLinks;
   }
 
-  setOnChosenLinksReceived(onReceivedChosenLinks) {
-    this.onReceivedChosenLinks = onReceivedChosenLinks;
-  }
-
   setDisplayChosenLinks(displayChosenLinks) {
     this.displayChosenLinks = displayChosenLinks;
+  }
+
+  updateStorageLinks() {
+    localStorage.setItem('links', JSON.stringify(this.links));
+  }
+
+  updateStorageCategories() {
+    localStorage.setItem('categories', JSON.stringify(this.categories));
+  }
+
+  markAsImportant(el) {
+    if (el.important === false) {
+      el.important = true;
+    } else {
+      el.important = false;
+    }
+    this.updateStorageCategories();
+    this.updateStorageLinks();
+  }
+
+  setTextFilter(param) {
+    this.textFilter = param;
+  }
+
+  getAllLinks(targetValue) {
+    if (this.textFilter !== null) {
+      let filteredCategoriesAfterSearch = this.links.filter(el => {
+        if (el.API.toLowerCase().includes(targetValue)) {
+          return el;
+        }
+      })
+      return filteredCategoriesAfterSearch;
+    } else {
+
+      return this.links;
+      
+    }
   }
 
   // CATEGORIES
 
   collectAllCategories() {
     getAllCategories().then((res) => {
-      //fill this.categories and add mark-as-important feature
       this.transformCategories(res);
-      //initialize search option
       this.onReceivedCategories();
     });
   }
 
-  // search functionality for categories; this method is called in displayUI for display
-  searchCategories(e) {
+  searchCategories(targetValue) {
     let filteredCategoriesAfterSearch = this.categories.filter(el => {
-      if (el.name.toLowerCase().includes(e.target.value.toLowerCase())) {
+      if (el.name.toLowerCase().includes(targetValue)) {
         return el;
       }
     })
     return filteredCategoriesAfterSearch;
   }
 
-  // method that adds "important: false" to category
   transformCategories(arr) {
     this.categories = arr.map(el => {
       return { name: el, important: false };
@@ -60,43 +90,29 @@ export class AllItems {
 
   collectAllLinks() {
     getData().then(res => {
-      //fill this.links array
       this.links = res;
-      //add mark-as-important feature
-      this.transformLink();
-      //initialize search option
       this.onReceivedLinks();
+      this.transformLink();
     })
   }
 
-  // search functionality for Links; this method is called in displayUI for display
-  searchAllLinks(e) {
+  searchAllLinks(targetValue) {
     let filteredLinksAfterSearch = this.links.filter(el => {
-      if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
+      if (el.API.toLowerCase().includes(targetValue)) {
         return el;
       }
     })
     return filteredLinksAfterSearch;
   }
 
-  // this method is called within displayUI module
   displayLinks(category) {
     getData(category).then((res) => {
       this.displayChosenLinks(res);
-      this.chosenLinks = res;
-      this.onReceivedChosenLinks();
+      this.links = res;
+      this.onReceivedLinks();
+      this.transformLink();
     })
   }
-
-  searchChosenLinks(e) {
-     let filteredChosenLinksAfterSearch = this.chosenLinks.filter(el => {
-      if (el.API.toLowerCase().includes(e.target.value.toLowerCase())) {
-        return el;
-      }
-    })
-    return filteredChosenLinksAfterSearch;
-  }
-
 
   transformLink() {
     this.links.forEach(el => {
