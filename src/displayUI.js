@@ -2,6 +2,7 @@ import { instanceOfMainClass } from './mainClass';
 
 // Display one Category element
 export function displayOneCategory(categoryElement) {
+
   let category = document.createElement('div');
   category.className = 'category-main';
 
@@ -18,15 +19,16 @@ export function displayOneCategory(categoryElement) {
     instanceOfMainClass.markAsImportant(categoryElement);
   })
 
-  categoryItem.addEventListener("click", (e) => {
+  category.addEventListener("click", (e) => {
     e.preventDefault();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     let firstWord = categoryElement.name;
     let parameter = firstWord.split(" ")[0];
-    instanceOfMainClass.displayLinks(parameter);
+    instanceOfMainClass.collectAllLinks(parameter);
     instanceOfMainClass.setTextFilter(parameter);
+    selectedCategoryDisplay(firstWord);
+    markAsImportantStyle(category);
   });
-
   category.append(categoryItem, categoryItemSvg)
   document.querySelector("#categories").appendChild(category);
 }
@@ -80,6 +82,32 @@ export function displayOneLink(link) {
   document.querySelector("#oneCategoryDisplayBox").append(individuals);
 }
 
+function selectedCategoryDisplay(category) {
+  let chosenCategoryDiv = document.createElement('div');
+  chosenCategoryDiv.className = 'chosen-category-div';
+
+  let chosenCategory = document.createElement('p');
+  chosenCategory.id = 'chosenCategory';
+  chosenCategory.className = 'chosen-category';
+  chosenCategory.textContent = category;
+
+  let chosenCategoryBtn = document.createElement('button');
+  chosenCategoryBtn.type = 'button';
+  chosenCategoryBtn.className = 'chosen-category-btn';
+  chosenCategoryBtn.textContent = 'X';
+
+  chosenCategoryDiv.append(chosenCategory, chosenCategoryBtn);
+  document.querySelector('#chosenCategorySearch').appendChild(chosenCategoryDiv);
+
+  chosenCategoryBtn.addEventListener('click', e => {
+    e.preventDefault();
+    btnClear();
+    btnClearLinks();
+    chosenCategoryBtn.parentElement.remove();
+  })
+}
+
+
 // Display of all Link elements
 export function displayLinksForChosenCategory(arrayOfLinks) {
   arrayOfLinks.forEach(link => {
@@ -90,6 +118,10 @@ export function displayLinksForChosenCategory(arrayOfLinks) {
 // Change of color for Mark-As-Important feature
 function changeColor(el) {
   el.classList.toggle('mark-important');
+}
+
+function markAsImportantStyle(el) {
+  el.classList.add('category-main-chosen');
 }
 
 //Search through Categories and display them

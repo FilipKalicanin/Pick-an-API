@@ -56,9 +56,7 @@ export class AllItems {
       })
       return filteredCategoriesAfterSearch;
     } else {
-
       return this.links;
-      
     }
   }
 
@@ -88,8 +86,9 @@ export class AllItems {
 
   // LINKS
 
-  collectAllLinks() {
-    getData().then(res => {
+  collectAllLinks(category) {
+    getData(category).then(res => {
+      this.displayChosenLinks(res);
       this.links = res;
       this.onReceivedLinks();
       this.transformLink();
@@ -103,15 +102,6 @@ export class AllItems {
       }
     })
     return filteredLinksAfterSearch;
-  }
-
-  displayLinks(category) {
-    getData(category).then((res) => {
-      this.displayChosenLinks(res);
-      this.links = res;
-      this.onReceivedLinks();
-      this.transformLink();
-    })
   }
 
   transformLink() {
