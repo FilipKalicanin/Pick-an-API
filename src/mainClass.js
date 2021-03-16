@@ -1,17 +1,23 @@
-import { getData, getAllCategories } from "./source";
+import { getData, getCategories } from "./source";
 
 export class AllItems {
 
   constructor(searchCategory, searchLinks, displayLinksForChosenCategory) {
+    // categories, search functionality
     this.categories = [];
     this.onReceivedCategories = searchCategory;
-    this.displayChosenLinks = displayLinksForChosenCategory;
+    // links, search functionality and initial display when app starts
     this.links = [];
     this.onReceivedLinks = searchLinks;
+    this.displayChosenLinks = displayLinksForChosenCategory;
+    // localStorage
     this.storageLinks = JSON.parse(localStorage.getItem('links'));
     this.storageCategories = JSON.parse(localStorage.getItem('categories'));
+    // used for search
     this.textFilter;
   }
+
+  // Set
 
   setOnCategoriesReceived(onReceivedCategories) {
     this.onReceivedCategories = onReceivedCategories
@@ -24,6 +30,8 @@ export class AllItems {
   setDisplayChosenLinks(displayChosenLinks) {
     this.displayChosenLinks = displayChosenLinks;
   }
+
+  // Update localStorage functionality
 
   updateStorageLinks() {
     localStorage.setItem('links', JSON.stringify(this.links));
@@ -43,9 +51,23 @@ export class AllItems {
     this.updateStorageLinks();
   }
 
+  // Track changes based on input in searchBar
   setTextFilter(param) {
     this.textFilter = param;
   }
+
+  // SEARCH CATEGORIES
+
+  getAllCategories(targetValue) {
+    let filteredCategoriesAfterSearch = this.categories.filter(el => {
+      if (el.name.toLowerCase().includes(targetValue)) {
+        return el;
+      }
+    })
+    return filteredCategoriesAfterSearch;
+  }
+
+  // SEARCH LINKS
 
   getAllLinks(targetValue) {
     if (this.textFilter !== null) {
@@ -63,19 +85,10 @@ export class AllItems {
   // CATEGORIES
 
   collectAllCategories() {
-    getAllCategories().then((res) => {
+    getCategories().then((res) => {
       this.transformCategories(res);
       this.onReceivedCategories();
     });
-  }
-
-  searchCategories(targetValue) {
-    let filteredCategoriesAfterSearch = this.categories.filter(el => {
-      if (el.name.toLowerCase().includes(targetValue)) {
-        return el;
-      }
-    })
-    return filteredCategoriesAfterSearch;
   }
 
   transformCategories(arr) {
@@ -93,15 +106,6 @@ export class AllItems {
       this.onReceivedLinks();
       this.transformLink();
     })
-  }
-
-  searchAllLinks(targetValue) {
-    let filteredLinksAfterSearch = this.links.filter(el => {
-      if (el.API.toLowerCase().includes(targetValue)) {
-        return el;
-      }
-    })
-    return filteredLinksAfterSearch;
   }
 
   transformLink() {

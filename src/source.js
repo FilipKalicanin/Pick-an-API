@@ -18,7 +18,7 @@ export function getData(category) {
     });
 }
 
-export function getAllCategories() {
+export function getCategories() {
   return fetch("https://api.publicapis.org/categories")
     .then((res) => {
       if (!res.ok) {

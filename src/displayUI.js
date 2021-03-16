@@ -82,6 +82,7 @@ export function displayOneLink(link) {
   document.querySelector("#oneCategoryDisplayBox").append(individuals);
 }
 
+// Show which category has been selected (like highlited)
 function selectedCategoryDisplay(category) {
   let chosenCategoryDiv = document.createElement('div');
   chosenCategoryDiv.className = 'chosen-category-div';
@@ -107,7 +108,6 @@ function selectedCategoryDisplay(category) {
   })
 }
 
-
 // Display of all Link elements
 export function displayLinksForChosenCategory(arrayOfLinks) {
   arrayOfLinks.forEach(link => {
@@ -120,6 +120,7 @@ function changeColor(el) {
   el.classList.toggle('mark-important');
 }
 
+// Highlight chosen category
 function markAsImportantStyle(el) {
   el.classList.add('category-main-chosen');
 }
@@ -135,7 +136,7 @@ export function searchCategory() {
     let targetValue = e.target.value.toLowerCase();
     document.querySelector("#categories").innerHTML = "";
 
-    instanceOfMainClass.searchCategories(targetValue).forEach(el => {
+    instanceOfMainClass.getAllCategories(targetValue).forEach(el => {
       displayOneCategory(el);
     })
   });
