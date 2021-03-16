@@ -24,10 +24,10 @@ export function displayOneCategory(categoryElement) {
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     let firstWord = categoryElement.name;
     let parameter = firstWord.split(" ")[0];
-    instanceOfMainClass.collectAllLinks(parameter);
-    instanceOfMainClass.setTextFilter(parameter);
+    instanceOfMainClass.setSelectedCategory(parameter);
     selectedCategoryDisplay(firstWord);
     markAsImportantStyle(category);
+    instanceOfMainClass.collectAllLinks()
   });
   category.append(categoryItem, categoryItemSvg)
   document.querySelector("#categories").appendChild(category);
@@ -105,6 +105,8 @@ function selectedCategoryDisplay(category) {
     btnClear();
     btnClearLinks();
     chosenCategoryBtn.parentElement.remove();
+    instanceOfMainClass.setSelectedCategory(null)
+    instanceOfMainClass.collectAllLinks();
   })
 }
 
@@ -133,10 +135,10 @@ export function searchCategory() {
 
   searchBar.addEventListener("input", (e) => {
     e.preventDefault();
-    let targetValue = e.target.value.toLowerCase();
+    instanceOfMainClass.textFilterCategories = e.target.value.toLowerCase();
     document.querySelector("#categories").innerHTML = "";
 
-    instanceOfMainClass.getAllCategories(targetValue).forEach(el => {
+    instanceOfMainClass.getCategories(instanceOfMainClass.textFilterCategories).forEach(el => {
       displayOneCategory(el);
     })
   });
@@ -148,10 +150,10 @@ export function searchLinks() {
 
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
-    let targetValue = e.target.value.toLowerCase();
+    instanceOfMainClass.textFilterLinks = e.target.value.toLowerCase();
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
 
-    instanceOfMainClass.getAllLinks(targetValue).forEach(el => {
+    instanceOfMainClass.getLinks(instanceOfMainClass.textFilterLinks).forEach(el => {
       displayOneLink(el);
     })
   });

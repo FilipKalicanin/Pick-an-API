@@ -1,4 +1,4 @@
-import { getData, getCategories } from "./source";
+import { getData, getAllCategories } from "./source";
 
 export class AllItems {
 
@@ -14,7 +14,9 @@ export class AllItems {
     this.storageLinks = JSON.parse(localStorage.getItem('links'));
     this.storageCategories = JSON.parse(localStorage.getItem('categories'));
     // used for search
-    this.textFilter;
+    this.textFilterLinks;
+    this.textFilterCategories;
+    this.selectedCategory;
   }
 
   // Set
@@ -29,6 +31,11 @@ export class AllItems {
 
   setDisplayChosenLinks(displayChosenLinks) {
     this.displayChosenLinks = displayChosenLinks;
+  }
+
+  setSelectedCategory(param) {
+    this.selectedCategory = param;
+    console.log(this.selectedCategory)
   }
 
   // Update localStorage functionality
@@ -52,40 +59,40 @@ export class AllItems {
   }
 
   // Track changes based on input in searchBar
-  setTextFilter(param) {
-    this.textFilter = param;
+  setTextFilterLinks(param) {
+    this.textFilterLinks = param;
+  }
+
+  setTextFilterCategories(param) {
+    this.textFilterCategories = param;
   }
 
   // SEARCH CATEGORIES
 
-  getAllCategories(targetValue) {
+  getCategories() {
     let filteredCategoriesAfterSearch = this.categories.filter(el => {
-      if (el.name.toLowerCase().includes(targetValue)) {
+      if (el.name.toLowerCase().includes(this.textFilterCategories)) {
         return el;
       }
     })
-    return filteredCategoriesAfterSearch;
+    return filteredCategoriesAfterSearch
   }
 
   // SEARCH LINKS
 
-  getAllLinks(targetValue) {
-    if (this.textFilter !== null) {
-      let filteredCategoriesAfterSearch = this.links.filter(el => {
-        if (el.API.toLowerCase().includes(targetValue)) {
-          return el;
-        }
-      })
-      return filteredCategoriesAfterSearch;
-    } else {
-      return this.links;
-    }
+  getLinks() {
+    let filteredLinksAfterSearch = this.links.filter(el => {
+      if (el.API.toLowerCase().includes(this.textFilterLinks)) {
+        return el;
+      }
+    })
+    return filteredLinksAfterSearch;
   }
 
   // CATEGORIES
 
   collectAllCategories() {
-    getCategories().then((res) => {
+    getAllCategories().then((res) => {
       this.transformCategories(res);
       this.onReceivedCategories();
     });
@@ -99,12 +106,12 @@ export class AllItems {
 
   // LINKS
 
-  collectAllLinks(category) {
-    getData(category).then(res => {
+  collectAllLinks() {
+    getData(this.selectedCategory).then(res => {
       this.displayChosenLinks(res);
       this.links = res;
-      this.onReceivedLinks();
       this.transformLink();
+      this.onReceivedLinks();
     })
   }
 
