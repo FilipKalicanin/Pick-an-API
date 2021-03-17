@@ -2,16 +2,23 @@ import { getData, getAllCategories } from "./source";
 
 export class AllItems {
 
-  constructor(searchCategory, searchLinks, displayLinksForChosenCategory) {
+  constructor(onReceivedCategories, onReceivedLinks) {
+    // categories, search functionality
     this.categories = [];
-    this.onReceivedCategories = searchCategory;
-    this.displayChosenLinks = displayLinksForChosenCategory;
+    this.onReceivedCategories = onReceivedCategories;
+    // links, search functionality and initial display when app starts
     this.links = [];
-    this.onReceivedLinks = searchLinks;
+    this.onReceivedLinks = onReceivedLinks;
+    // localStorage
     this.storageLinks = JSON.parse(localStorage.getItem('links'));
     this.storageCategories = JSON.parse(localStorage.getItem('categories'));
-    this.textFilter;
+    // used for search
+    this.textFilterLinks = '';
+    this.textFilterCategories = '';
+    this.selectedCategory = '';
   }
+
+  // Set
 
   setOnCategoriesReceived(onReceivedCategories) {
     this.onReceivedCategories = onReceivedCategories
@@ -21,10 +28,76 @@ export class AllItems {
     this.onReceivedLinks = onReceivedLinks;
   }
 
-  setDisplayChosenLinks(displayChosenLinks) {
-    this.displayChosenLinks = displayChosenLinks;
+  setSelectedCategory(param) {
+    this.selectedCategory = param;
   }
 
+  setTextFilterLinks(param) {
+    this.textFilterLinks = param;
+  }
+
+  setTextFilterCategories(param) {
+    this.textFilterCategories = param;
+  }
+
+  // CATEGORIES
+
+  collectAllCategories() {
+    getAllCategories().then((res) => {
+      this.categories = this.transformCategories(res);
+      this.onReceivedCategories();
+    });
+  }
+
+  getCategories() {
+    if (this.textFilterCategories) {
+      let filteredCategoriesAfterSearch = this.categories.filter(el => {
+        if (el.name.toLowerCase().includes(this.textFilterCategories)) {
+          return el;
+        }
+      })
+      return filteredCategoriesAfterSearch;
+    } else {
+      return this.categories;
+    }
+  }
+
+  transformCategories(arr) {
+    return arr.map(el => {
+      return { name: el, important: false };
+    })
+  }
+
+  // LINKS
+
+  collectAllLinks() {
+    getData(this.selectedCategory).then(res => {
+      this.links = this.transformLink(res);
+      this.onReceivedLinks();
+    })
+  }
+
+  getLinks() {
+    if (this.textFilterLinks) {
+      let filteredLinksAfterSearch = this.links.filter(el => {
+        if (el.API.toLowerCase().includes(this.textFilterLinks)) {
+          return el;
+        }
+      })
+      return filteredLinksAfterSearch;
+    } else {
+      return this.links;
+    }
+  }
+
+  transformLink(res) {
+    res.forEach(el => {
+      el.important = false;
+    })
+    return res;
+  }
+
+  // LocalStorage
   updateStorageLinks() {
     localStorage.setItem('links', JSON.stringify(this.links));
   }
@@ -33,91 +106,22 @@ export class AllItems {
     localStorage.setItem('categories', JSON.stringify(this.categories));
   }
 
-  markAsImportant(el) {
+  markAsImportantCategory(el) {
     if (el.important === false) {
       el.important = true;
     } else {
       el.important = false;
     }
     this.updateStorageCategories();
-    this.updateStorageLinks();
   }
 
-  setTextFilter(param) {
-    this.textFilter = param;
-  }
-
-  getAllLinks(targetValue) {
-    if (this.textFilter !== null) {
-      let filteredCategoriesAfterSearch = this.links.filter(el => {
-        if (el.API.toLowerCase().includes(targetValue)) {
-          return el;
-        }
-      })
-      return filteredCategoriesAfterSearch;
+  markAsImportantLink(el) {
+    if (el.important === false) {
+      el.important = true;
     } else {
-
-      return this.links;
-      
-    }
-  }
-
-  // CATEGORIES
-
-  collectAllCategories() {
-    getAllCategories().then((res) => {
-      this.transformCategories(res);
-      this.onReceivedCategories();
-    });
-  }
-
-  searchCategories(targetValue) {
-    let filteredCategoriesAfterSearch = this.categories.filter(el => {
-      if (el.name.toLowerCase().includes(targetValue)) {
-        return el;
-      }
-    })
-    return filteredCategoriesAfterSearch;
-  }
-
-  transformCategories(arr) {
-    this.categories = arr.map(el => {
-      return { name: el, important: false };
-    })
-  }
-
-  // LINKS
-
-  collectAllLinks() {
-    getData().then(res => {
-      this.links = res;
-      this.onReceivedLinks();
-      this.transformLink();
-    })
-  }
-
-  searchAllLinks(targetValue) {
-    let filteredLinksAfterSearch = this.links.filter(el => {
-      if (el.API.toLowerCase().includes(targetValue)) {
-        return el;
-      }
-    })
-    return filteredLinksAfterSearch;
-  }
-
-  displayLinks(category) {
-    getData(category).then((res) => {
-      this.displayChosenLinks(res);
-      this.links = res;
-      this.onReceivedLinks();
-      this.transformLink();
-    })
-  }
-
-  transformLink() {
-    this.links.forEach(el => {
       el.important = false;
-    })
+    }
+    this.updateStorageLinks();
   }
 }
 
