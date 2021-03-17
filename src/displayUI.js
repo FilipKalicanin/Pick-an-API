@@ -28,7 +28,6 @@ export function displayOneCategory(categoryElement) {
     let parameter = firstWord.split(" ")[0];
     instanceOfMainClass.setSelectedCategory(parameter);
     selectedCategoryDisplay(firstWord);
-    markAsImportantStyle(category);
     instanceOfMainClass.collectAllLinks();
   });
   category.append(categoryItem, categoryItemSvg)
@@ -40,6 +39,7 @@ export function renderCategories() {
   instanceOfMainClass.getCategories().forEach((el) => {
     displayOneCategory(el);
   });
+
 }
 
 // Show which category has been selected (like highlited)
@@ -122,7 +122,6 @@ export function renderLinks() {
   })
 }
 
-
 // OTHER /////////////////////////////////////////////
 // Buttons, search bars, style function;
 
@@ -170,14 +169,29 @@ export function btnClearLinks() {
   instanceOfMainClass.collectAllLinks();
 }
 
+// initialization of btnClear for Category
+export function btnClearForCategories() {
+  document.querySelector("#btnClear").addEventListener("click", (e) => {
+    e.preventDefault();
+    btnClear();
+  });
+}
+
+export function btnClearForLinks() {
+  document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
+    e.preventDefault();
+    btnClearLinks();
+  });
+}
+
 // Change of color for Mark-As-Important feature
 function changeColor(el) {
   el.classList.toggle('mark-important');
 }
 
 // Highlight chosen category
-function markAsImportantStyle(el) {
-  el.classList.add('category-main-chosen');
-}
+// function markAsImportantStyle(el) {
+//   el.classList.add('category-main-chosen');
+// }
 
 
