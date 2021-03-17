@@ -2,7 +2,7 @@ import { instanceOfMainClass } from './mainClass';
 
 ////////////// CATEGORIES ///////////////////////////////////
 /////////////////////////////////////////////////////////////
-
+ 
 // Display one Category element
 export function displayOneCategory(categoryElement) {
 
