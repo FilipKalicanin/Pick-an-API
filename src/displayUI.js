@@ -155,8 +155,8 @@ export function btnClear() {
   let searchContent = document.querySelector("#searchBar");
   searchContent.value = "";
   document.querySelector("#categories").innerHTML = "";
-  instanceOfMainClass.setTextFilterCategories(null);
-  instanceOfMainClass.setSelectedCategory(null);
+  instanceOfMainClass.setTextFilterCategories('');
+  instanceOfMainClass.setSelectedCategory('');
   instanceOfMainClass.collectAllCategories();
 }
 
@@ -165,22 +165,10 @@ export function btnClearLinks() {
   let searchContent = document.querySelector("#searchBarLinks");
   searchContent.value = "";
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-  instanceOfMainClass.setTextFilterLinks(null);
-  instanceOfMainClass.setSelectedCategory(null);
+  instanceOfMainClass.setTextFilterLinks('');
+  instanceOfMainClass.setSelectedCategory('');
   instanceOfMainClass.collectAllLinks();
 }
-
-// initialization of btnClear for Category
-document.querySelector("#btnClear").addEventListener("click", (e) => {
-  e.preventDefault();
-  btnClear();
-});
-
-// initialization of btnClear for Links
-document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
-  e.preventDefault();
-  btnClearLinks();
-});
 
 // Change of color for Mark-As-Important feature
 function changeColor(el) {

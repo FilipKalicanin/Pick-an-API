@@ -2,20 +2,20 @@ import { getData, getAllCategories } from "./source";
 
 export class AllItems {
 
-  constructor(renderCategories, renderLinks) {
+  constructor(onReceivedCategories, onReceivedLinks) {
     // categories, search functionality
     this.categories = [];
-    this.onReceivedCategories = renderCategories;
+    this.onReceivedCategories = onReceivedCategories;
     // links, search functionality and initial display when app starts
     this.links = [];
-    this.onReceivedLinks = renderLinks;
+    this.onReceivedLinks = onReceivedLinks;
     // localStorage
     this.storageLinks = JSON.parse(localStorage.getItem('links'));
     this.storageCategories = JSON.parse(localStorage.getItem('categories'));
     // used for search
-    this.textFilterLinks;
-    this.textFilterCategories;
-    this.selectedCategory;
+    this.textFilterLinks = '';
+    this.textFilterCategories = '';
+    this.selectedCategory = '';
   }
 
   // Set
@@ -26,10 +26,6 @@ export class AllItems {
 
   setOnLinksReceived(onReceivedLinks) {
     this.onReceivedLinks = onReceivedLinks;
-  }
-
-  setDisplayChosenLinks(displayChosenLinks) {
-    this.displayChosenLinks = displayChosenLinks;
   }
 
   setSelectedCategory(param) {
@@ -43,7 +39,6 @@ export class AllItems {
   setTextFilterCategories(param) {
     this.textFilterCategories = param;
   }
-
 
   // CATEGORIES
 
