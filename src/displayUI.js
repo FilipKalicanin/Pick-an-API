@@ -2,7 +2,7 @@ import { instanceOfMainClass } from './mainClass';
 
 ////////////// CATEGORIES ///////////////////////////////////
 /////////////////////////////////////////////////////////////
- 
+
 // Display one Category element
 export function displayOneCategory(categoryElement) {
 
@@ -11,7 +11,9 @@ export function displayOneCategory(categoryElement) {
 
   let categoryItem = document.createElement("div");
   categoryItem.textContent = categoryElement.name;
-  categoryItem.id = "categoryItem";
+  let firstWord = categoryElement.name;
+  let parameter = firstWord.split(" ")[0];
+  categoryItem.id = parameter;
 
   let categoryItemSvg = document.createElement('div');
   categoryItemSvg.className = "fas fa-star";
@@ -23,14 +25,19 @@ export function displayOneCategory(categoryElement) {
 
   category.addEventListener("click", (e) => {
     e.preventDefault();
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
+
+    reverseStyleSelected();
+
     let firstWord = categoryElement.name;
     let parameter = firstWord.split(" ")[0];
+
+    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     instanceOfMainClass.setSelectedCategory(parameter);
-    selectedCategoryDisplay(firstWord);
-    markAsImportantStyle(category);
+    selectedCategoryDisplay(parameter);
+    setStyleSelected(category);
     instanceOfMainClass.collectAllLinks();
   });
+
   category.append(categoryItem, categoryItemSvg)
   document.querySelector("#categories").appendChild(category);
 }
@@ -60,9 +67,11 @@ function selectedCategoryDisplay(category) {
 
   chosenCategoryBtn.addEventListener('click', e => {
     e.preventDefault();
-    btnClear();
-    btnClearLinks();
+    reverseStyleSelected();
     chosenCategoryBtn.parentElement.remove();
+    document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
+    instanceOfMainClass.setSelectedCategory('');
+    instanceOfMainClass.collectAllLinks();
   })
 
   chosenCategoryDiv.append(chosenCategory, chosenCategoryBtn);
@@ -151,23 +160,23 @@ export function searchBarLinks() {
 }
 
 //btnClear for Category search
-export function btnClear() {
+export function btnClearCategoriesFilter() {
   let searchContent = document.querySelector("#searchBar");
   searchContent.value = "";
   document.querySelector("#categories").innerHTML = "";
   instanceOfMainClass.setTextFilterCategories('');
   instanceOfMainClass.setSelectedCategory('');
-  instanceOfMainClass.collectAllCategories();
+  renderCategories();
 }
 
 //btnClear for Links search
-export function btnClearLinks() {
+export function btnClearLinksFilter() {
   let searchContent = document.querySelector("#searchBarLinks");
   searchContent.value = "";
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
   instanceOfMainClass.setTextFilterLinks('');
   instanceOfMainClass.setSelectedCategory('');
-  instanceOfMainClass.collectAllLinks();
+  renderLinks();
 }
 
 // Change of color for Mark-As-Important feature
@@ -176,8 +185,14 @@ function changeColor(el) {
 }
 
 // Highlight chosen category
-function markAsImportantStyle(el) {
+function setStyleSelected(el) {
   el.classList.add('category-main-chosen');
+}
+
+function reverseStyleSelected() {
+  if (instanceOfMainClass.selectedCategory !== '') {
+    document.getElementById(instanceOfMainClass.selectedCategory).parentElement.classList.remove('category-main-chosen');
+  }
 }
 
 
