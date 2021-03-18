@@ -11,19 +11,17 @@
 </head>
 
 <body>
-    <div class="search-section">
-        <h2 class="heading">Search Categories:</h2>
-        <input type="text" id="searchBar" class='search-bar' placeholder="Eg. Patent" maxlength="30"></input>
-        <button type="button" id="btnClear" class="btn-clear">Clear</button>
-    </div>
-
     <div class="categories-section">
-        <h2 class='heading'>Categories:</h2>
+        <div class="heading-categories">
+            <h2 class='heading'>Categories:</h2>
+            <input type="text" id="searchBar" class='search-bar' placeholder="Search Category" maxlength="30"></input>
+            <button type="button" id="btnClear" class="btn-clear">Clear</button>
+        </div>
         <div class='categories' id='categories'></div>
     </div>
 
     <div class="search-section" id="chosenCategorySearch">
-        <h2 class="heading">Chosen Category:</h2>
+        <h3 class="heading">Selected:</h3>
         <div id="displaySelected">
             <!-- <div class="chosen-category-div">
                 <p id='chosenCategory' class='chosen-category'>asdadassssss</p>
@@ -32,14 +30,12 @@
         </div>
     </div>
 
-    <div class="search-section">
-        <h2 class="heading">Search Links:</h2>
-        <input type="text" id="searchBarLinks" class='search-bar' placeholder="Eg. Cats" maxlength="30"></input>
-        <button type="button" id="btnClearLinks" class="btn-clear">Clear</button>
-    </div>
-
-    <div class="display-section">
-        <h2 class='heading'>Links:</h2>
+    <div class="links-section">
+        <div class="heading-categories">
+            <h2 class='heading'>Links:</h2>
+            <input type="text" id="searchBarLinks" class='search-bar' placeholder="Eg. Cats" maxlength="30"></input>
+            <button type="button" id="btnClearLinks" class="btn-clear">Clear</button>
+        </div>
         <div class="one-category-box" id="oneCategoryDisplayBox"></div>
     </div>
 </body>

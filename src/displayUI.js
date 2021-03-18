@@ -54,6 +54,7 @@ function selectedCategoryDisplay(category) {
 
   let chosenCategoryDiv = document.createElement('div');
   chosenCategoryDiv.className = 'chosen-category-div';
+  chosenCategoryDiv.id = 'chosen-div';
 
   let chosenCategory = document.createElement('p');
   chosenCategory.id = 'chosenCategory';
@@ -68,7 +69,10 @@ function selectedCategoryDisplay(category) {
   chosenCategoryBtn.addEventListener('click', e => {
     e.preventDefault();
     reverseStyleSelected();
-    chosenCategoryBtn.parentElement.remove();
+    document.getElementById('chosen-div').classList.add('fall');
+    document.getElementById('chosen-div').addEventListener('transitionend', function() {
+      chosenCategoryBtn.parentElement.remove();
+    });
     document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
     instanceOfMainClass.setSelectedCategory('');
     instanceOfMainClass.collectAllLinks();
