@@ -187,14 +187,14 @@ export function btnClearLinksFilter() {
 export function btnClearForCategories() {
   document.querySelector("#btnClear").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClear();
+    btnClearCategoriesFilter();
   });
 }
 
 export function btnClearForLinks() {
   document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClearLinks();
+    btnClearLinksFilter();
   });
 }
 
