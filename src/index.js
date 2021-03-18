@@ -1,5 +1,5 @@
 import { instanceOfMainClass } from './mainClass';
-import { renderCategories, renderLinks, searchBarCategories, searchBarLinks, btnClearForCategories, btnClearForLinks } from "./displayUI";
+import { renderCategories, renderLinks, searchBarCategories, searchBarLinks, btnClearForCategoriesFilterText, btnClearForLinksFilterText } from "./displayUI";
 
 instanceOfMainClass.setOnCategoriesReceived(renderCategories);
 instanceOfMainClass.setOnLinksReceived(renderLinks);
@@ -11,5 +11,5 @@ instanceOfMainClass.collectAllLinks();
 
 searchBarCategories();
 searchBarLinks();
-btnClearForCategories();
-btnClearForLinks();
+btnClearForCategoriesFilterText();
+btnClearForLinksFilterText();
