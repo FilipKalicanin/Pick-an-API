@@ -20,7 +20,8 @@ export function displayOneCategory(categoryElement) {
 
   categoryItemSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    changeColor(categoryItemSvg);
+    console.log(categoryElement);
+    setStyleMarkedAsImportant(categoryItemSvg);
   })
 
   category.addEventListener("click", (e) => {
@@ -96,8 +97,8 @@ export function displayOneLink(link) {
 
   paramSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    changeColor(paramSvg);
-    instanceOfMainClass.markAsImportant(link);
+    console.log(link);
+    setStyleMarkedAsImportant(paramSvg);
   })
 
   let paramApi = document.createElement("p");
@@ -134,7 +135,6 @@ export function renderLinks() {
     displayOneLink(link);
   })
 }
-
 
 // OTHER /////////////////////////////////////////////
 // Buttons, search bars, style function;
@@ -179,12 +179,11 @@ export function btnClearLinksFilter() {
   searchContent.value = "";
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
   instanceOfMainClass.setTextFilterLinks('');
-  instanceOfMainClass.setSelectedCategory('');
   renderLinks();
 }
 
 // Change of color for Mark-As-Important feature
-function changeColor(el) {
+function setStyleMarkedAsImportant(el) {
   el.classList.toggle('mark-important');
 }
 

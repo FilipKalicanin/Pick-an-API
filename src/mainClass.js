@@ -3,23 +3,22 @@ import { getData, getAllCategories } from "./source";
 export class AllItems {
 
   constructor(onReceivedCategories, onReceivedLinks) {
-    // categories, search functionality
+    // categories
     this.categories = [];
     this.onReceivedCategories = onReceivedCategories;
-    // links, search functionality and initial display when app starts
+    // links
     this.links = [];
     this.onReceivedLinks = onReceivedLinks;
-    // localStorage
-    this.storageLinks = JSON.parse(localStorage.getItem('links'));
-    this.storageCategories = JSON.parse(localStorage.getItem('categories'));
-    // used for search
+    // textFilter used for searchTabs and selectedCategory used for displaying links of certain category
     this.textFilterLinks = '';
     this.textFilterCategories = '';
     this.selectedCategory = '';
+    // localStorage
+    this.categoriesStorage = JSON.parse(localStorage.getItem('categories'));
+    this.linksStorage = JSON.parse(localStorage.getItem('links'));
   }
 
   // Set
-
   setOnCategoriesReceived(onReceivedCategories) {
     this.onReceivedCategories = onReceivedCategories
   }
@@ -42,6 +41,7 @@ export class AllItems {
 
   // CATEGORIES
 
+  // called initially when page loads
   collectAllCategories() {
     getAllCategories().then((res) => {
       this.categories = this.transformCategories(res);
@@ -70,6 +70,7 @@ export class AllItems {
 
   // LINKS
 
+  // called initially when page loads
   collectAllLinks() {
     getData(this.selectedCategory).then(res => {
       this.links = this.transformLink(res);
@@ -97,31 +98,32 @@ export class AllItems {
     return res;
   }
 
-  // LocalStorage
-  updateStorageLinks() {
-    localStorage.setItem('links', JSON.stringify(this.links));
-  }
-
-  updateStorageCategories() {
-    localStorage.setItem('categories', JSON.stringify(this.categories));
-  }
-
+  // localStorage - Categories
   markAsImportantCategory(el) {
     if (el.important === false) {
       el.important = true;
     } else {
       el.important = false;
     }
-    this.updateStorageCategories();
+    this.updateStorageCategories(el.name, el.important);
   }
 
+  updateStorageCategories(id, value) {
+    this.categoriesStorage.setItem('categories', JSON.stringify([id, value]));
+  }
+
+  // localStorage - Links
   markAsImportantLink(el) {
     if (el.important === false) {
       el.important = true;
     } else {
       el.important = false;
     }
-    this.updateStorageLinks();
+    this.updateStorageLinks(el.API, el.important);
+  }
+
+  updateStorageLinks(id, value) {
+    this.linksStorage.setItem('links', JSON.stringify([id, value]));
   }
 }
 
