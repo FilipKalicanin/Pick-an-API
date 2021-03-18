@@ -165,7 +165,7 @@ export function searchBarLinks() {
 }
 
 //btnClear for Category search
-export function btnClearCategoriesFilter() {
+export function btnClearCategoriesFilterText() {
   let searchContent = document.querySelector("#searchBar");
   searchContent.value = "";
   document.querySelector("#categories").innerHTML = "";
@@ -175,7 +175,7 @@ export function btnClearCategoriesFilter() {
 }
 
 //btnClear for Links search
-export function btnClearLinksFilter() {
+export function btnClearLinksFilterText() {
   let searchContent = document.querySelector("#searchBarLinks");
   searchContent.value = "";
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
@@ -184,17 +184,17 @@ export function btnClearLinksFilter() {
 }
 
 // initialization of btnClear for Category
-export function btnClearForCategories() {
+export function btnClearForCategoriesFilterText() {
   document.querySelector("#btnClear").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClear();
+    btnClearCategoriesFilterText();
   });
 }
 
-export function btnClearForLinks() {
+export function btnClearForLinksFilterText() {
   document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClearLinks();
+    btnClearLinksFilterText();
   });
 }
 
