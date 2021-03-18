@@ -23,3 +23,5 @@ btnClearLinksFilter();
 
 searchBarCategories();
 searchBarLinks();
+btnClearForCategories();
+btnClearForLinks();

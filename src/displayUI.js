@@ -48,6 +48,7 @@ export function renderCategories() {
   instanceOfMainClass.getCategories().forEach((el) => {
     displayOneCategory(el);
   });
+
 }
 
 // Show which category has been selected (like highlited)
@@ -180,6 +181,21 @@ export function btnClearLinksFilter() {
   document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
   instanceOfMainClass.setTextFilterLinks('');
   renderLinks();
+}
+
+// initialization of btnClear for Category
+export function btnClearForCategories() {
+  document.querySelector("#btnClear").addEventListener("click", (e) => {
+    e.preventDefault();
+    btnClear();
+  });
+}
+
+export function btnClearForLinks() {
+  document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
+    e.preventDefault();
+    btnClearLinks();
+  });
 }
 
 // Change of color for Mark-As-Important feature
