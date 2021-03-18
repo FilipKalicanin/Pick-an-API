@@ -204,15 +204,9 @@ function setStyleMarkedAsImportant(el) {
 }
 
 // Highlight chosen category
-<<<<<<< HEAD
-// function markAsImportantStyle(el) {
-//   el.classList.add('category-main-chosen');
-// }
-=======
 function setStyleSelected(el) {
   el.classList.add('category-main-chosen');
 }
->>>>>>> e41503cc0e1e2941633b3179bc99b7c93f0b4a8e
 
 function reverseStyleSelected() {
   if (instanceOfMainClass.selectedCategory !== '') {
