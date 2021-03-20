@@ -11,31 +11,42 @@ export function displayOneCategory(categoryElement) {
 
   let categoryItem = document.createElement("div");
   categoryItem.textContent = categoryElement.name;
-  let firstWord = categoryElement.name;
-  let parameter = firstWord.split(" ")[0];
-  categoryItem.id = parameter;
+  let elementName = categoryElement.name;
+  let firstWord = elementName.split(" ")[0];
+  categoryItem.id = firstWord;
 
   let categoryItemSvg = document.createElement('div');
   categoryItemSvg.className = "fas fa-star";
+  categoryItemSvg.id = `${elementName}Star`;
+
+  if(categoryElement.important === true) {
+    setStyleMarkedAsImportant(categoryItemSvg);
+  }
 
   categoryItemSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log(categoryElement);
+
     setStyleMarkedAsImportant(categoryItemSvg);
+
+    if(categoryElement.important === false) {
+      instanceOfMainClass.setMapOfImportantCategories(categoryElement);
+    } else {
+      instanceOfMainClass.deleteElementFromMapOfImportantCategories(categoryElement);
+    }
   })
 
   category.addEventListener("click", (e) => {
     e.preventDefault();
-
+    
     reverseStyleSelected();
 
-    let firstWord = categoryElement.name;
-    let parameter = firstWord.split(" ")[0];
+    let elementName = categoryElement.name;
+    let firstWord = elementName.split(" ")[0];
 
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-    instanceOfMainClass.setSelectedCategory(parameter);
-    selectedCategoryDisplay(parameter);
+    selectedCategoryDisplay(firstWord);
     setStyleSelected(category);
+    instanceOfMainClass.setSelectedCategory(firstWord);
     instanceOfMainClass.collectAllLinks();
   });
 
@@ -48,7 +59,6 @@ export function renderCategories() {
   instanceOfMainClass.getCategories().forEach((el) => {
     displayOneCategory(el);
   });
-
 }
 
 // Show which category has been selected (like highlited)
@@ -98,9 +108,9 @@ export function displayOneLink(link) {
 
   paramSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log(link);
+    // instanceOfMainClass.markAsImportantLink(link);
     setStyleMarkedAsImportant(paramSvg);
-  })
+  });
 
   let paramApi = document.createElement("p");
   paramApi.className = "display-data-p";
@@ -199,8 +209,8 @@ export function btnClearForLinksFilterText() {
 }
 
 // Change of color for Mark-As-Important feature
-function setStyleMarkedAsImportant(el) {
-  el.classList.toggle('mark-important');
+export function setStyleMarkedAsImportant(element) {
+  element.classList.toggle('mark-important');
 }
 
 // Highlight chosen category

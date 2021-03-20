@@ -14,7 +14,7 @@ export class AllItems {
     this.textFilterCategories = '';
     this.selectedCategory = '';
     // localStorage
-    this.categoriesStorage = JSON.parse(localStorage.getItem('categories'));
+    this.mapOfImportantCategories = JSON.parse(localStorage.getItem('importantCategories')) || {};
     this.linksStorage = JSON.parse(localStorage.getItem('links'));
   }
 
@@ -64,7 +64,11 @@ export class AllItems {
 
   transformCategories(arr) {
     return arr.map(el => {
-      return { name: el, important: false };
+      if (this.mapOfImportantCategories[el]) {
+        return { name: el, important: true }
+      } else {
+        return { name: el, important: false };
+      }
     })
   }
 
@@ -98,20 +102,36 @@ export class AllItems {
     return res;
   }
 
-  // localStorage - Categories
-  markAsImportantCategory(el) {
+  ///////////////////////////////
+  // localStorage - Categories //
+  ///////////////////////////////
+
+  toggleImportantCategory(el) {
     if (el.important === false) {
       el.important = true;
     } else {
       el.important = false;
     }
-    this.updateStorageCategories(el.name, el.important);
   }
 
-  updateStorageCategories(id, value) {
-    this.categoriesStorage.setItem('categories', JSON.stringify([id, value]));
+  updateStorageCategories() {
+    localStorage.setItem('importantCategories', JSON.stringify(this.mapOfImportantCategories));
   }
 
+  setMapOfImportantCategories(element) {
+    this.toggleImportantCategory(element);
+    this.mapOfImportantCategories[element.name] = element.important;
+    this.updateStorageCategories();
+  }
+
+  deleteElementFromMapOfImportantCategories(element) {
+    this.toggleImportantCategory(element);
+    delete this.mapOfImportantCategories[element.name];
+    this.updateStorageCategories();
+  }
+
+  ///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
   // localStorage - Links
   markAsImportantLink(el) {
     if (el.important === false) {
@@ -119,12 +139,20 @@ export class AllItems {
     } else {
       el.important = false;
     }
-    this.updateStorageLinks(el.API, el.important);
   }
 
   updateStorageLinks(id, value) {
-    this.linksStorage.setItem('links', JSON.stringify([id, value]));
+    localStorage.setItem('links', JSON.stringify([id, value]));
   }
+
+  checkIfMarkedLinks() {
+    this.links.forEach(element => {
+      if (this.linksStorage.key(element.name)) {
+        element.important = true;
+      }
+    })
+  }
+
 }
 
 let instanceOfMainClass = new AllItems();
