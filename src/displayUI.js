@@ -6,8 +6,14 @@ import { instanceOfMainClass } from './mainClass';
 // Display one Category element
 export function displayOneCategory(categoryElement) {
 
+  let searchContent = document.querySelector("#searchBar");
+
   let category = document.createElement('div');
   category.className = 'category-main';
+
+  if(searchContent.value === '') {
+    category.classList.add('fadein-animation');
+  }
 
   let categoryItem = document.createElement("div");
   categoryItem.textContent = categoryElement.name;
@@ -19,7 +25,7 @@ export function displayOneCategory(categoryElement) {
   categoryItemSvg.className = "fas fa-star";
   categoryItemSvg.id = `${elementName}Star`;
 
-  if(categoryElement.important === true) {
+  if (categoryElement.important === true) {
     setStyleMarkedAsImportant(categoryItemSvg);
   }
 
@@ -28,7 +34,7 @@ export function displayOneCategory(categoryElement) {
 
     setStyleMarkedAsImportant(categoryItemSvg);
 
-    if(categoryElement.important === false) {
+    if (categoryElement.important === false) {
       instanceOfMainClass.setMapOfImportantCategories(categoryElement);
     } else {
       instanceOfMainClass.deleteElementFromMapOfImportantCategories(categoryElement);
@@ -37,16 +43,16 @@ export function displayOneCategory(categoryElement) {
 
   category.addEventListener("click", (e) => {
     e.preventDefault();
-    
+    console.log(instanceOfMainClass.selectedCategory)
     reverseStyleSelected();
 
     let elementName = categoryElement.name;
     let firstWord = elementName.split(" ")[0];
 
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-    selectedCategoryDisplay(firstWord);
+    selectedCategoryDisplay(categoryElement);
     setStyleSelected(category);
-    instanceOfMainClass.setSelectedCategory(firstWord);
+    instanceOfMainClass.setSelectedCategory({id: elementName, firstWord: firstWord});
     instanceOfMainClass.collectAllLinks();
   });
 
@@ -71,7 +77,7 @@ function selectedCategoryDisplay(category) {
   let chosenCategory = document.createElement('p');
   chosenCategory.id = 'chosenCategory';
   chosenCategory.className = 'chosen-category';
-  chosenCategory.textContent = category;
+  chosenCategory.textContent = category.name;
 
   let chosenCategoryBtn = document.createElement('button');
   chosenCategoryBtn.type = 'button';
@@ -82,7 +88,7 @@ function selectedCategoryDisplay(category) {
     e.preventDefault();
     reverseStyleSelected();
     document.getElementById('chosen-div').classList.add('fall');
-    document.getElementById('chosen-div').addEventListener('transitionend', function() {
+    document.getElementById('chosen-div').addEventListener('transitionend', function () {
       chosenCategoryBtn.parentElement.remove();
     });
     document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
@@ -106,10 +112,21 @@ export function displayOneLink(link) {
   let paramSvg = document.createElement('div');
   paramSvg.className = "fas fa-star svg-within-link";
 
+  if (link.important === true) {
+    setStyleMarkedAsImportant(paramSvg);
+  }
+
   paramSvg.addEventListener('click', (e) => {
     e.preventDefault();
     // instanceOfMainClass.markAsImportantLink(link);
     setStyleMarkedAsImportant(paramSvg);
+
+    if (link.important === false) {
+      instanceOfMainClass.setMapOfImportantLinks(link);
+    } else {
+      instanceOfMainClass.deleteElementFromMapOfImportantLinks(link);
+    }
+
   });
 
   let paramApi = document.createElement("p");
@@ -155,6 +172,7 @@ export function searchBarCategories() {
 
   searchBar.addEventListener("input", (e) => {
     e.preventDefault();
+
     instanceOfMainClass.setTextFilterCategories(e.target.value.toLowerCase());
     document.querySelector("#categories").innerHTML = "";
     renderCategories();
@@ -168,6 +186,7 @@ export function searchBarLinks() {
 
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
+    
     instanceOfMainClass.setTextFilterLinks(e.target.value.toLowerCase());
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     renderLinks();
@@ -195,16 +214,28 @@ export function btnClearLinksFilterText() {
 
 // initialization of btnClear for Category
 export function btnClearForCategoriesFilterText() {
+  let searchBarCategories = document.querySelector('#searchBar');
+
   document.querySelector("#btnClear").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClearCategoriesFilterText();
+    if (searchBarCategories.value === '') {
+      document.querySelector("#btnClear").disabeled = true;
+    } else {
+      btnClearCategoriesFilterText();
+    }
   });
 }
 
 export function btnClearForLinksFilterText() {
+  let searchBarLinks = document.querySelector('#searchBarLinks');
+
   document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClearLinksFilterText();
+    if (searchBarLinks.value === '') {
+      document.querySelector("#btnClearLinks").disabeled = true;
+    } else {
+      btnClearLinksFilterText();
+    }
   });
 }
 
@@ -220,7 +251,7 @@ function setStyleSelected(el) {
 
 function reverseStyleSelected() {
   if (instanceOfMainClass.selectedCategory !== '') {
-    document.getElementById(instanceOfMainClass.selectedCategory).parentElement.classList.remove('category-main-chosen');
+    document.getElementById(instanceOfMainClass.selectedCategory.firstWord).parentElement.classList.remove('category-main-chosen');
   }
 }
 

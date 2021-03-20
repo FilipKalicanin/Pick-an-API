@@ -15,7 +15,7 @@ export class AllItems {
     this.selectedCategory = '';
     // localStorage
     this.mapOfImportantCategories = JSON.parse(localStorage.getItem('importantCategories')) || {};
-    this.linksStorage = JSON.parse(localStorage.getItem('links'));
+    this.mapOfImportantLinks = JSON.parse(localStorage.getItem('importantLinks')) || {};
   }
 
   // Set
@@ -28,7 +28,7 @@ export class AllItems {
   }
 
   setSelectedCategory(param) {
-    this.selectedCategory = param;
+    this.selectedCategory = param
   }
 
   setTextFilterLinks(param) {
@@ -76,7 +76,7 @@ export class AllItems {
 
   // called initially when page loads
   collectAllLinks() {
-    getData(this.selectedCategory).then(res => {
+    getData(this.selectedCategory.firstWord).then(res => {
       this.links = this.transformLink(res);
       this.onReceivedLinks();
     })
@@ -97,7 +97,11 @@ export class AllItems {
 
   transformLink(res) {
     res.forEach(el => {
-      el.important = false;
+      if(this.mapOfImportantLinks[el.API]) {
+        return el.important = true;
+      } else {
+        return el.important = false;
+      }
     })
     return res;
   }
@@ -133,7 +137,8 @@ export class AllItems {
   ///////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////
   // localStorage - Links
-  markAsImportantLink(el) {
+  
+  toggleImportantLink(el) {
     if (el.important === false) {
       el.important = true;
     } else {
@@ -141,16 +146,20 @@ export class AllItems {
     }
   }
 
-  updateStorageLinks(id, value) {
-    localStorage.setItem('links', JSON.stringify([id, value]));
+  updateStorageLinks() {
+    localStorage.setItem('importantLinks',JSON.stringify(this.mapOfImportantLinks));
   }
 
-  checkIfMarkedLinks() {
-    this.links.forEach(element => {
-      if (this.linksStorage.key(element.name)) {
-        element.important = true;
-      }
-    })
+  setMapOfImportantLinks(element) {
+    this.toggleImportantLink(element);
+    this.mapOfImportantLinks[element.API] = element.important;
+    this.updateStorageLinks();
+  }
+
+  deleteElementFromMapOfImportantLinks(element) {
+    this.toggleImportantLink(element);
+    delete this.mapOfImportantLinks[element.API];
+    this.updateStorageLinks();
   }
 
 }
