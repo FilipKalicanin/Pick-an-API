@@ -10,16 +10,15 @@ export function displayOneCategory(categoryElement) {
 
   let category = document.createElement('div');
   category.className = 'category-main';
+  category.id = categoryElement.name;
 
-  if(searchContent.value === '') {
+  if (searchContent.value === '') {
     category.classList.add('fadein-animation');
   }
 
   let categoryItem = document.createElement("div");
   categoryItem.textContent = categoryElement.name;
   let elementName = categoryElement.name;
-  let firstWord = elementName.split(" ")[0];
-  categoryItem.id = firstWord;
 
   let categoryItemSvg = document.createElement('div');
   categoryItemSvg.className = "fas fa-star";
@@ -43,17 +42,19 @@ export function displayOneCategory(categoryElement) {
 
   category.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log(instanceOfMainClass.selectedCategory)
+
     reverseStyleSelected();
 
     let elementName = categoryElement.name;
     let firstWord = elementName.split(" ")[0];
 
+    instanceOfMainClass.setSelectedCategory({ id: elementName, firstWord: firstWord });
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-    selectedCategoryDisplay(categoryElement);
     setStyleSelected(category);
-    instanceOfMainClass.setSelectedCategory({id: elementName, firstWord: firstWord});
+    selectedCategoryDisplay(categoryElement);
+
     instanceOfMainClass.collectAllLinks();
+
   });
 
   category.append(categoryItem, categoryItemSvg)
@@ -118,7 +119,7 @@ export function displayOneLink(link) {
 
   paramSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    // instanceOfMainClass.markAsImportantLink(link);
+
     setStyleMarkedAsImportant(paramSvg);
 
     if (link.important === false) {
@@ -186,7 +187,7 @@ export function searchBarLinks() {
 
   searchBarLinks.addEventListener("input", (e) => {
     e.preventDefault();
-    
+
     instanceOfMainClass.setTextFilterLinks(e.target.value.toLowerCase());
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     renderLinks();
@@ -249,9 +250,10 @@ function setStyleSelected(el) {
   el.classList.add('category-main-chosen');
 }
 
+
 function reverseStyleSelected() {
   if (instanceOfMainClass.selectedCategory !== '') {
-    document.getElementById(instanceOfMainClass.selectedCategory.firstWord).parentElement.classList.remove('category-main-chosen');
+    document.getElementById(instanceOfMainClass.selectedCategory.id).classList.remove('category-main-chosen');
   }
 }
 

@@ -65,9 +65,9 @@ export class AllItems {
   transformCategories(arr) {
     return arr.map(el => {
       if (this.mapOfImportantCategories[el]) {
-        return { name: el, important: true }
+        return { name: el, important: true}
       } else {
-        return { name: el, important: false };
+        return { name: el, important: false};
       }
     })
   }
