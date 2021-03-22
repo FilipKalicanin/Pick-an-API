@@ -40,7 +40,6 @@ export class AllItems {
   }
 
   // CATEGORIES
-
   // called initially when page loads
   collectAllCategories() {
     getAllCategories().then((res) => {
@@ -65,15 +64,14 @@ export class AllItems {
   transformCategories(arr) {
     return arr.map(el => {
       if (this.mapOfImportantCategories[el]) {
-        return { name: el, important: true}
+        return { name: el, id: el, important: true };
       } else {
-        return { name: el, important: false};
+        return { name: el, id: el, important: false };
       }
     })
   }
 
   // LINKS
-
   // called initially when page loads
   collectAllLinks() {
     getData(this.selectedCategory.firstWord).then(res => {
@@ -97,7 +95,7 @@ export class AllItems {
 
   transformLink(res) {
     res.forEach(el => {
-      if(this.mapOfImportantLinks[el.API]) {
+      if (this.mapOfImportantLinks[el.API]) {
         return el.important = true;
       } else {
         return el.important = false;
@@ -107,7 +105,7 @@ export class AllItems {
   }
 
   ///////////////////////////////
-  // localStorage - Categories //
+  // localStorage - CATEGORIES //
   ///////////////////////////////
 
   toggleImportantCategory(el) {
@@ -117,27 +115,24 @@ export class AllItems {
       el.important = false;
     }
   }
-
   updateStorageCategories() {
     localStorage.setItem('importantCategories', JSON.stringify(this.mapOfImportantCategories));
   }
-
   setMapOfImportantCategories(element) {
     this.toggleImportantCategory(element);
     this.mapOfImportantCategories[element.name] = element.important;
     this.updateStorageCategories();
   }
-
   deleteElementFromMapOfImportantCategories(element) {
     this.toggleImportantCategory(element);
     delete this.mapOfImportantCategories[element.name];
     this.updateStorageCategories();
   }
 
-  ///////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////
-  // localStorage - Links
-  
+  ///////////////////////////////
+  // localStorage - LINKS//
+  ///////////////////////////////
+
   toggleImportantLink(el) {
     if (el.important === false) {
       el.important = true;
@@ -145,23 +140,19 @@ export class AllItems {
       el.important = false;
     }
   }
-
   updateStorageLinks() {
-    localStorage.setItem('importantLinks',JSON.stringify(this.mapOfImportantLinks));
+    localStorage.setItem('importantLinks', JSON.stringify(this.mapOfImportantLinks));
   }
-
   setMapOfImportantLinks(element) {
     this.toggleImportantLink(element);
     this.mapOfImportantLinks[element.API] = element.important;
     this.updateStorageLinks();
   }
-
   deleteElementFromMapOfImportantLinks(element) {
     this.toggleImportantLink(element);
     delete this.mapOfImportantLinks[element.API];
     this.updateStorageLinks();
   }
-
 }
 
 let instanceOfMainClass = new AllItems();

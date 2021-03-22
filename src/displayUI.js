@@ -49,12 +49,11 @@ export function displayOneCategory(categoryElement) {
     let firstWord = elementName.split(" ")[0];
 
     instanceOfMainClass.setSelectedCategory({ id: elementName, firstWord: firstWord });
+
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     setStyleSelected(category);
     selectedCategoryDisplay(categoryElement);
-
     instanceOfMainClass.collectAllLinks();
-
   });
 
   category.append(categoryItem, categoryItemSvg)
@@ -66,6 +65,7 @@ export function renderCategories() {
   instanceOfMainClass.getCategories().forEach((el) => {
     displayOneCategory(el);
   });
+  setStyleSelected(document.getElementById(instanceOfMainClass.selectedCategory.id));
 }
 
 // Show which category has been selected (like highlited)
@@ -88,8 +88,8 @@ function selectedCategoryDisplay(category) {
   chosenCategoryBtn.addEventListener('click', e => {
     e.preventDefault();
     reverseStyleSelected();
-    document.getElementById('chosen-div').classList.add('fall');
-    document.getElementById('chosen-div').addEventListener('transitionend', function () {
+    document.querySelector('#chosen-div').classList.add('fall');
+    document.querySelector('#chosen-div').addEventListener('transitionend', function () {
       chosenCategoryBtn.parentElement.remove();
     });
     document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
@@ -247,12 +247,13 @@ export function setStyleMarkedAsImportant(element) {
 
 // Highlight chosen category
 function setStyleSelected(el) {
-  el.classList.add('category-main-chosen');
+  if (el !== null) {
+    el.classList.add('category-main-chosen');
+  }
 }
 
-
 function reverseStyleSelected() {
-  if (instanceOfMainClass.selectedCategory !== '') {
+  if (instanceOfMainClass.selectedCategory !== '' && instanceOfMainClass.textFilterCategories === '') {
     document.getElementById(instanceOfMainClass.selectedCategory.id).classList.remove('category-main-chosen');
   }
 }
