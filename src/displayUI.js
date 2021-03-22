@@ -12,10 +12,6 @@ export function displayOneCategory(categoryElement) {
   category.className = 'category-main';
   category.id = categoryElement.name;
 
-  if (searchContent.value === '') {
-    category.classList.add('fadein-animation');
-  }
-
   let categoryItem = document.createElement("div");
   categoryItem.textContent = categoryElement.name;
   let elementName = categoryElement.name;
@@ -23,6 +19,14 @@ export function displayOneCategory(categoryElement) {
   let categoryItemSvg = document.createElement('div');
   categoryItemSvg.className = "fas fa-star";
   categoryItemSvg.id = `${elementName}Star`;
+
+  if (searchContent.value === '') {
+    category.classList.add('fadein-animation');
+  }
+
+  if (instanceOfMainClass.selectedCategory && instanceOfMainClass.selectedCategory === categoryElement.name) {
+    setStyleSelected(category);
+  }
 
   if (categoryElement.important === true) {
     setStyleMarkedAsImportant(categoryItemSvg);
@@ -43,34 +47,23 @@ export function displayOneCategory(categoryElement) {
   category.addEventListener("click", (e) => {
     e.preventDefault();
 
-    if(document.getElementById(instanceOfMainClass.selectedCategory.id)) {
+    if (document.getElementById(instanceOfMainClass.selectedCategory)) {
       reverseStyleSelected();
     }
 
-    let elementName = categoryElement.name;
-    let firstWord = elementName.split(" ")[0];
+    instanceOfMainClass.setSelectedCategory(categoryElement.name);
 
-    instanceOfMainClass.setSelectedCategory({ id: elementName, firstWord: firstWord });
-
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     setStyleSelected(category);
     selectedCategoryDisplay(categoryElement);
+    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     instanceOfMainClass.collectAllLinks();
   });
 
-  category.append(categoryItem, categoryItemSvg)
+  category.append(categoryItem, categoryItemSvg);
   document.querySelector("#categories").appendChild(category);
 }
 
-// Display of all categories elements (Renderer);
-export function renderCategories() {
-  instanceOfMainClass.getCategories().forEach((el) => {
-    displayOneCategory(el);
-  });
-  setStyleSelected(document.getElementById(instanceOfMainClass.selectedCategory.id));
-}
-
-// Show which category has been selected (like highlited)
+// Display which category has been selected (like highlited)
 function selectedCategoryDisplay(category) {
 
   let chosenCategoryDiv = document.createElement('div');
@@ -89,11 +82,14 @@ function selectedCategoryDisplay(category) {
 
   chosenCategoryBtn.addEventListener('click', e => {
     e.preventDefault();
-    reverseStyleSelected();
+
     document.querySelector('#chosen-div').classList.add('fall');
     document.querySelector('#chosen-div').addEventListener('transitionend', function () {
       chosenCategoryBtn.parentElement.remove();
     });
+
+    reverseStyleSelected();
+
     document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
     instanceOfMainClass.setSelectedCategory('');
     instanceOfMainClass.collectAllLinks();
@@ -104,8 +100,16 @@ function selectedCategoryDisplay(category) {
   document.querySelector('#displaySelected').appendChild(chosenCategoryDiv);
 }
 
-////////////// LINKS ////////////////////////////////////////
-/////////////////////////////////////////////////////////////
+// Render of category elements;
+export function renderCategories() {
+  instanceOfMainClass.getCategories().forEach((el) => {
+    displayOneCategory(el);
+  })
+}
+
+////////////////////////////////
+////////////// LINKS ///////////
+////////////////////////////////
 
 // Display of One Link element
 export function displayOneLink(link) {
@@ -114,23 +118,6 @@ export function displayOneLink(link) {
 
   let paramSvg = document.createElement('div');
   paramSvg.className = "fas fa-star svg-within-link";
-
-  if (link.important === true) {
-    setStyleMarkedAsImportant(paramSvg);
-  }
-
-  paramSvg.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    setStyleMarkedAsImportant(paramSvg);
-
-    if (link.important === false) {
-      instanceOfMainClass.setMapOfImportantLinks(link);
-    } else {
-      instanceOfMainClass.deleteElementFromMapOfImportantLinks(link);
-    }
-
-  });
 
   let paramApi = document.createElement("p");
   paramApi.className = "display-data-p";
@@ -150,6 +137,23 @@ export function displayOneLink(link) {
   paramLink.target = "_blank";
   paramLink.textContent = "Link to an API webpage";
 
+  if (link.important === true) {
+    setStyleMarkedAsImportant(paramSvg);
+  }
+
+  paramSvg.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    setStyleMarkedAsImportant(paramSvg);
+
+    if (link.important === false) {
+      instanceOfMainClass.setMapOfImportantLinks(link);
+    } else {
+      instanceOfMainClass.deleteElementFromMapOfImportantLinks(link);
+    }
+
+  });
+
   individuals.append(
     paramSvg,
     paramApi,
@@ -160,20 +164,20 @@ export function displayOneLink(link) {
   document.querySelector("#oneCategoryDisplayBox").append(individuals);
 }
 
-// Display of all Link elements
+// Render of all Link elements
 export function renderLinks() {
   instanceOfMainClass.getLinks().forEach(link => {
     displayOneLink(link);
   })
 }
 
-// OTHER /////////////////////////////////////////////
-// Buttons, search bars, style function;
+////////////////////////////////////////
+////////////// UTILITIES ///////////////
+////////////////////////////////////////
+// Buttons, search bars, style functions
 
 export function searchBarCategories() {
-  const searchBar = document.querySelector("#searchBar");
-
-  searchBar.addEventListener("input", (e) => {
+  document.querySelector("#searchBar").addEventListener("input", (e) => {
     e.preventDefault();
 
     instanceOfMainClass.setTextFilterCategories(e.target.value.toLowerCase());
@@ -183,11 +187,7 @@ export function searchBarCategories() {
 }
 
 export function searchBarLinks() {
-  const searchBarLinks = document.querySelector("#searchBarLinks");
-
-  renderLinks();
-
-  searchBarLinks.addEventListener("input", (e) => {
+  document.querySelector("#searchBarLinks").addEventListener("input", (e) => {
     e.preventDefault();
 
     instanceOfMainClass.setTextFilterLinks(e.target.value.toLowerCase());
@@ -196,26 +196,16 @@ export function searchBarLinks() {
   });
 }
 
-//btnClear for Category search
+// btnClear for Category search
 export function btnClearCategoriesFilterText() {
   let searchContent = document.querySelector("#searchBar");
   searchContent.value = "";
   document.querySelector("#categories").innerHTML = "";
   instanceOfMainClass.setTextFilterCategories('');
-  instanceOfMainClass.setSelectedCategory('');
-  renderCategories();
+  renderCategories()
 }
 
-//btnClear for Links search
-export function btnClearLinksFilterText() {
-  let searchContent = document.querySelector("#searchBarLinks");
-  searchContent.value = "";
-  document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-  instanceOfMainClass.setTextFilterLinks('');
-  renderLinks();
-}
-
-// initialization of btnClear for Category
+// Initialization of btnClear for Category
 export function btnClearForCategoriesFilterText() {
   let searchBarCategories = document.querySelector('#searchBar');
 
@@ -229,6 +219,16 @@ export function btnClearForCategoriesFilterText() {
   });
 }
 
+// btnClear for Links search
+export function btnClearLinksFilterText() {
+  let searchContent = document.querySelector("#searchBarLinks");
+  searchContent.value = "";
+  document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
+  instanceOfMainClass.setTextFilterLinks('');
+  renderLinks();
+}
+
+// Implementation of btnClear for Links
 export function btnClearForLinksFilterText() {
   let searchBarLinks = document.querySelector('#searchBarLinks');
 
@@ -242,22 +242,19 @@ export function btnClearForLinksFilterText() {
   });
 }
 
-// Change of color for Mark-As-Important feature
+// Change of STAR color for Mark-As-Important feature
 export function setStyleMarkedAsImportant(element) {
   element.classList.toggle('mark-important');
 }
 
 // Highlight chosen category
 function setStyleSelected(el) {
-  if (el) {
-    el.classList.add('category-main-chosen');
-  }
+  el.classList.add('category-main-chosen')
 }
 
+// Remove highlight from chosen category
 function reverseStyleSelected() {
   if (instanceOfMainClass.selectedCategory !== '') {
-    document.getElementById(instanceOfMainClass.selectedCategory.id).classList.remove('category-main-chosen');
+    document.getElementById(instanceOfMainClass.selectedCategory).classList.remove('category-main-chosen');
   }
 }
-
-

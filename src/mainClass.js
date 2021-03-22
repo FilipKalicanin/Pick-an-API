@@ -66,7 +66,7 @@ export class AllItems {
       if (this.mapOfImportantCategories[el]) {
         return { name: el, id: el, important: true };
       } else {
-        return { name: el, id: el, important: false };
+        return { name: el, id: el, important: false};
       }
     })
   }
@@ -74,7 +74,9 @@ export class AllItems {
   // LINKS
   // called initially when page loads
   collectAllLinks() {
-    getData(this.selectedCategory.firstWord).then(res => {
+    let elementName = instanceOfMainClass.selectedCategory;
+    let firstWord = elementName.split(" ")[0];
+    getData(firstWord).then(res => {
       this.links = this.transformLink(res);
       this.onReceivedLinks();
     })
