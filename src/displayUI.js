@@ -43,7 +43,9 @@ export function displayOneCategory(categoryElement) {
   category.addEventListener("click", (e) => {
     e.preventDefault();
 
-    reverseStyleSelected();
+    if(document.getElementById(instanceOfMainClass.selectedCategory.id)) {
+      reverseStyleSelected();
+    }
 
     let elementName = categoryElement.name;
     let firstWord = elementName.split(" ")[0];
@@ -247,13 +249,13 @@ export function setStyleMarkedAsImportant(element) {
 
 // Highlight chosen category
 function setStyleSelected(el) {
-  if (el !== null) {
+  if (el) {
     el.classList.add('category-main-chosen');
   }
 }
 
 function reverseStyleSelected() {
-  if (instanceOfMainClass.selectedCategory !== '' && instanceOfMainClass.textFilterCategories === '') {
+  if (instanceOfMainClass.selectedCategory !== '') {
     document.getElementById(instanceOfMainClass.selectedCategory.id).classList.remove('category-main-chosen');
   }
 }
