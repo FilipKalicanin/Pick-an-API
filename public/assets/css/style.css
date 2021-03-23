@@ -132,7 +132,7 @@ body {
 
 .fas {
     margin-left: .3rem;
-    color: rgb(187, 187, 108);
+    color: rgb(202, 202, 202);
 }
 
 .fas:hover {
@@ -147,11 +147,11 @@ body {
     top: -1rem;
     left: 85%;
     font-size: 1.5rem;
-    color: rgb(247, 176, 45);
+    color: rgb(172, 172, 172);
 }
 
 .mark-important {
-    color: rgb(0, 184, 245);
+    color: rgb(255,0,255);
 }
 
 .search-section {

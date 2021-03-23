@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "pickanapi-fk",
+    "site": "pickanapi",
     "public": "public",
     "ignore": [
       "firebase.json",

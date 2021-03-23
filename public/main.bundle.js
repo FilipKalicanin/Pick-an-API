@@ -137,6 +137,7 @@ function displayOneCategory(categoryElement) {
 
   categoryItemSvg.addEventListener('click', function (e) {
     e.preventDefault();
+    e.stopPropagation();
     setStyleMarkedAsImportant(categoryItemSvg);
 
     if (categoryElement.important === false) {
