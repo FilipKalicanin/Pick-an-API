@@ -18,6 +18,20 @@ export class AllItems {
     this.mapOfImportantLinks = JSON.parse(localStorage.getItem('importantLinks')) || {};
   }
 
+  // Get
+
+  getSelectegCategory() {
+    return this.selectedCategory;
+  }
+
+  getTextFilterCategories() {
+    return this.textFilterCategories;
+  }
+
+  getTextFilterLinks() {
+    return this.textFilterLinks;
+  }
+
   // Set
   setOnCategoriesReceived(onReceivedCategories) {
     this.onReceivedCategories = onReceivedCategories
@@ -31,12 +45,12 @@ export class AllItems {
     this.selectedCategory = param
   }
 
-  setTextFilterLinks(param) {
-    this.textFilterLinks = param;
-  }
-
   setTextFilterCategories(param) {
     this.textFilterCategories = param;
+  }
+
+  setTextFilterLinks(param) {
+    this.textFilterLinks = param;
   }
 
   // CATEGORIES
@@ -120,12 +134,12 @@ export class AllItems {
   updateStorageCategories() {
     localStorage.setItem('importantCategories', JSON.stringify(this.mapOfImportantCategories));
   }
-  setMapOfImportantCategories(element) {
+  setCategoryAsImportant(element) {
     this.toggleImportantCategory(element);
     this.mapOfImportantCategories[element.name] = element.important;
     this.updateStorageCategories();
   }
-  deleteElementFromMapOfImportantCategories(element) {
+  deleteElementFromImportantCategories(element) {
     this.toggleImportantCategory(element);
     delete this.mapOfImportantCategories[element.name];
     this.updateStorageCategories();
@@ -145,12 +159,12 @@ export class AllItems {
   updateStorageLinks() {
     localStorage.setItem('importantLinks', JSON.stringify(this.mapOfImportantLinks));
   }
-  setMapOfImportantLinks(element) {
+  setLinkAsImportant(element) {
     this.toggleImportantLink(element);
     this.mapOfImportantLinks[element.API] = element.important;
     this.updateStorageLinks();
   }
-  deleteElementFromMapOfImportantLinks(element) {
+  deleteElementFromImportantLinks(element) {
     this.toggleImportantLink(element);
     delete this.mapOfImportantLinks[element.API];
     this.updateStorageLinks();

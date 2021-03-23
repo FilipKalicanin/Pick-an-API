@@ -1,12 +1,11 @@
 import { instanceOfMainClass } from './mainClass';
 
-////////////// CATEGORIES ///////////////////////////////////
-/////////////////////////////////////////////////////////////
+////////////////////////////////
+////////////// Categories ///////////
+////////////////////////////////
 
 // Display one Category element
 export function displayOneCategory(categoryElement) {
-
-  let searchContent = document.querySelector("#searchBar");
 
   let category = document.createElement('div');
   category.className = 'category-main';
@@ -20,11 +19,11 @@ export function displayOneCategory(categoryElement) {
   categoryItemSvg.className = "fas fa-star";
   categoryItemSvg.id = `${elementName}Star`;
 
-  if (searchContent.value === '') {
+  if (instanceOfMainClass.getTextFilterCategories()=== "") {
     category.classList.add('fadein-animation');
   }
 
-  if (instanceOfMainClass.selectedCategory && instanceOfMainClass.selectedCategory === categoryElement.name) {
+  if (instanceOfMainClass.getSelectegCategory() && instanceOfMainClass.getSelectegCategory() === categoryElement.name) {
     setStyleSelected(category);
   }
 
@@ -38,16 +37,16 @@ export function displayOneCategory(categoryElement) {
     setStyleMarkedAsImportant(categoryItemSvg);
 
     if (categoryElement.important === false) {
-      instanceOfMainClass.setMapOfImportantCategories(categoryElement);
+      instanceOfMainClass.setCategoryAsImportant(categoryElement);
     } else {
-      instanceOfMainClass.deleteElementFromMapOfImportantCategories(categoryElement);
+      instanceOfMainClass.deleteElementFromImportantCategories(categoryElement);
     }
   })
 
   category.addEventListener("click", (e) => {
     e.preventDefault();
 
-    if (document.getElementById(instanceOfMainClass.selectedCategory)) {
+    if (document.getElementById(instanceOfMainClass.getSelectegCategory())) {
       reverseStyleSelected();
     }
 
@@ -83,12 +82,12 @@ function selectedCategoryDisplay(category) {
   chosenCategoryBtn.addEventListener('click', e => {
     e.preventDefault();
 
+    reverseStyleSelected();
+
     document.querySelector('#chosen-div').classList.add('fall');
     document.querySelector('#chosen-div').addEventListener('transitionend', function () {
       chosenCategoryBtn.parentElement.remove();
     });
-
-    reverseStyleSelected();
 
     document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
     instanceOfMainClass.setSelectedCategory('');
@@ -147,9 +146,9 @@ export function displayOneLink(link) {
     setStyleMarkedAsImportant(paramSvg);
 
     if (link.important === false) {
-      instanceOfMainClass.setMapOfImportantLinks(link);
+      instanceOfMainClass.setLinkAsImportant(link);
     } else {
-      instanceOfMainClass.deleteElementFromMapOfImportantLinks(link);
+      instanceOfMainClass.deleteElementFromImportantLinks(link);
     }
 
   });
@@ -254,7 +253,7 @@ function setStyleSelected(el) {
 
 // Remove highlight from chosen category
 function reverseStyleSelected() {
-  if (instanceOfMainClass.selectedCategory !== '') {
-    document.getElementById(instanceOfMainClass.selectedCategory).classList.remove('category-main-chosen');
+  if (instanceOfMainClass.getSelectegCategory() !== '') {
+    document.getElementById(instanceOfMainClass.getSelectegCategory()).classList.remove('category-main-chosen');
   }
 }
