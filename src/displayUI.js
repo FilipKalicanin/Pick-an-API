@@ -33,6 +33,7 @@ export function displayOneCategory(categoryElement) {
 
   categoryItemSvg.addEventListener('click', (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     setStyleMarkedAsImportant(categoryItemSvg);
 
