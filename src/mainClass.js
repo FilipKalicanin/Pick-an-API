@@ -14,8 +14,22 @@ export class AllItems {
     this.textFilterCategories = '';
     this.selectedCategory = '';
     // localStorage
-    this.categoriesStorage = JSON.parse(localStorage.getItem('categories'));
-    this.linksStorage = JSON.parse(localStorage.getItem('links'));
+    this.mapOfImportantCategories = JSON.parse(localStorage.getItem('importantCategories')) || {};
+    this.mapOfImportantLinks = JSON.parse(localStorage.getItem('importantLinks')) || {};
+  }
+
+  // Get
+
+  getSelectegCategory() {
+    return this.selectedCategory;
+  }
+
+  getTextFilterCategories() {
+    return this.textFilterCategories;
+  }
+
+  getTextFilterLinks() {
+    return this.textFilterLinks;
   }
 
   // Set
@@ -28,19 +42,18 @@ export class AllItems {
   }
 
   setSelectedCategory(param) {
-    this.selectedCategory = param;
-  }
-
-  setTextFilterLinks(param) {
-    this.textFilterLinks = param;
+    this.selectedCategory = param
   }
 
   setTextFilterCategories(param) {
     this.textFilterCategories = param;
   }
 
-  // CATEGORIES
+  setTextFilterLinks(param) {
+    this.textFilterLinks = param;
+  }
 
+  // CATEGORIES
   // called initially when page loads
   collectAllCategories() {
     getAllCategories().then((res) => {
@@ -64,15 +77,20 @@ export class AllItems {
 
   transformCategories(arr) {
     return arr.map(el => {
-      return { name: el, important: false };
+      if (this.mapOfImportantCategories[el]) {
+        return { name: el, id: el, important: true };
+      } else {
+        return { name: el, id: el, important: false};
+      }
     })
   }
 
   // LINKS
-
   // called initially when page loads
   collectAllLinks() {
-    getData(this.selectedCategory).then(res => {
+    let elementName = instanceOfMainClass.selectedCategory;
+    let firstWord = elementName.split(" ")[0];
+    getData(firstWord).then(res => {
       this.links = this.transformLink(res);
       this.onReceivedLinks();
     })
@@ -93,37 +111,63 @@ export class AllItems {
 
   transformLink(res) {
     res.forEach(el => {
-      el.important = false;
+      if (this.mapOfImportantLinks[el.API]) {
+        return el.important = true;
+      } else {
+        return el.important = false;
+      }
     })
     return res;
   }
 
-  // localStorage - Categories
-  markAsImportantCategory(el) {
+  ///////////////////////////////
+  // localStorage - CATEGORIES //
+  ///////////////////////////////
+
+  toggleImportantCategory(el) {
     if (el.important === false) {
       el.important = true;
     } else {
       el.important = false;
     }
-    this.updateStorageCategories(el.name, el.important);
+  }
+  updateStorageCategories() {
+    localStorage.setItem('importantCategories', JSON.stringify(this.mapOfImportantCategories));
+  }
+  setCategoryAsImportant(element) {
+    this.toggleImportantCategory(element);
+    this.mapOfImportantCategories[element.name] = element.important;
+    this.updateStorageCategories();
+  }
+  deleteElementFromImportantCategories(element) {
+    this.toggleImportantCategory(element);
+    delete this.mapOfImportantCategories[element.name];
+    this.updateStorageCategories();
   }
 
-  updateStorageCategories(id, value) {
-    this.categoriesStorage.setItem('categories', JSON.stringify([id, value]));
-  }
+  ///////////////////////////////
+  // localStorage - LINKS//
+  ///////////////////////////////
 
-  // localStorage - Links
-  markAsImportantLink(el) {
+  toggleImportantLink(el) {
     if (el.important === false) {
       el.important = true;
     } else {
       el.important = false;
     }
-    this.updateStorageLinks(el.API, el.important);
   }
-
-  updateStorageLinks(id, value) {
-    this.linksStorage.setItem('links', JSON.stringify([id, value]));
+  updateStorageLinks() {
+    localStorage.setItem('importantLinks', JSON.stringify(this.mapOfImportantLinks));
+  }
+  setLinkAsImportant(element) {
+    this.toggleImportantLink(element);
+    this.mapOfImportantLinks[element.API] = element.important;
+    this.updateStorageLinks();
+  }
+  deleteElementFromImportantLinks(element) {
+    this.toggleImportantLink(element);
+    delete this.mapOfImportantLinks[element.API];
+    this.updateStorageLinks();
   }
 }
 
