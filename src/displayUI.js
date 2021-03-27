@@ -1,57 +1,69 @@
 import { instanceOfMainClass } from './mainClass';
 
-////////////// CATEGORIES ///////////////////////////////////
-/////////////////////////////////////////////////////////////
+////////////////////////////////
+////////////// Categories ///////////
+////////////////////////////////
 
 // Display one Category element
 export function displayOneCategory(categoryElement) {
 
   let category = document.createElement('div');
   category.className = 'category-main';
+  category.id = categoryElement.name;
 
   let categoryItem = document.createElement("div");
   categoryItem.textContent = categoryElement.name;
-  let firstWord = categoryElement.name;
-  let parameter = firstWord.split(" ")[0];
-  categoryItem.id = parameter;
+  let elementName = categoryElement.name;
 
   let categoryItemSvg = document.createElement('div');
   categoryItemSvg.className = "fas fa-star";
+  categoryItemSvg.id = `${elementName}Star`;
+
+  if (instanceOfMainClass.getTextFilterCategories()=== "") {
+    category.classList.add('fadein-animation');
+  }
+
+  if (instanceOfMainClass.getSelectegCategory() && instanceOfMainClass.getSelectegCategory() === categoryElement.name) {
+    setStyleSelected(category);
+  }
+
+  if (categoryElement.important === true) {
+    setStyleMarkedAsImportant(categoryItemSvg);
+  }
 
   categoryItemSvg.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log(categoryElement);
+    e.stopPropagation();
+
     setStyleMarkedAsImportant(categoryItemSvg);
+
+    if (categoryElement.important === false) {
+      instanceOfMainClass.setCategoryAsImportant(categoryElement);
+    } else {
+      instanceOfMainClass.deleteElementFromImportantCategories(categoryElement);
+    }
   })
 
   category.addEventListener("click", (e) => {
     e.preventDefault();
 
-    reverseStyleSelected();
+    if (document.getElementById(instanceOfMainClass.getSelectegCategory())) {
+      reverseStyleSelected();
+    }
 
-    let firstWord = categoryElement.name;
-    let parameter = firstWord.split(" ")[0];
+    instanceOfMainClass.setSelectedCategory(categoryElement.name);
 
-    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
-    instanceOfMainClass.setSelectedCategory(parameter);
-    selectedCategoryDisplay(parameter);
     setStyleSelected(category);
+    selectedCategoryDisplay(categoryElement);
+    document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     instanceOfMainClass.collectAllLinks();
   });
 
-  category.append(categoryItem, categoryItemSvg)
+  category.append(categoryItem, categoryItemSvg);
   document.querySelector("#categories").appendChild(category);
 }
 
-// Display of all categories elements (Renderer);
-export function renderCategories() {
-  instanceOfMainClass.getCategories().forEach((el) => {
-    displayOneCategory(el);
-  });
-
-}
-
-// Show which category has been selected (like highlited)
+// Display which category has been selected (like highlited)
 function selectedCategoryDisplay(category) {
 
   let chosenCategoryDiv = document.createElement('div');
@@ -61,7 +73,7 @@ function selectedCategoryDisplay(category) {
   let chosenCategory = document.createElement('p');
   chosenCategory.id = 'chosenCategory';
   chosenCategory.className = 'chosen-category';
-  chosenCategory.textContent = category;
+  chosenCategory.textContent = category.name;
 
   let chosenCategoryBtn = document.createElement('button');
   chosenCategoryBtn.type = 'button';
@@ -70,11 +82,14 @@ function selectedCategoryDisplay(category) {
 
   chosenCategoryBtn.addEventListener('click', e => {
     e.preventDefault();
+
     reverseStyleSelected();
-    document.getElementById('chosen-div').classList.add('fall');
-    document.getElementById('chosen-div').addEventListener('transitionend', function() {
+
+    document.querySelector('#chosen-div').classList.add('fall');
+    document.querySelector('#chosen-div').addEventListener('transitionend', function () {
       chosenCategoryBtn.parentElement.remove();
     });
+
     document.querySelector('#oneCategoryDisplayBox').innerHTML = '';
     instanceOfMainClass.setSelectedCategory('');
     instanceOfMainClass.collectAllLinks();
@@ -85,8 +100,16 @@ function selectedCategoryDisplay(category) {
   document.querySelector('#displaySelected').appendChild(chosenCategoryDiv);
 }
 
-////////////// LINKS ////////////////////////////////////////
-/////////////////////////////////////////////////////////////
+// Render of category elements;
+export function renderCategories() {
+  instanceOfMainClass.getCategories().forEach((el) => {
+    displayOneCategory(el);
+  })
+}
+
+////////////////////////////////
+////////////// LINKS ///////////
+////////////////////////////////
 
 // Display of One Link element
 export function displayOneLink(link) {
@@ -95,12 +118,6 @@ export function displayOneLink(link) {
 
   let paramSvg = document.createElement('div');
   paramSvg.className = "fas fa-star svg-within-link";
-
-  paramSvg.addEventListener('click', (e) => {
-    e.preventDefault();
-    console.log(link);
-    setStyleMarkedAsImportant(paramSvg);
-  })
 
   let paramApi = document.createElement("p");
   paramApi.className = "display-data-p";
@@ -120,6 +137,23 @@ export function displayOneLink(link) {
   paramLink.target = "_blank";
   paramLink.textContent = "Link to an API webpage";
 
+  if (link.important === true) {
+    setStyleMarkedAsImportant(paramSvg);
+  }
+
+  paramSvg.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    setStyleMarkedAsImportant(paramSvg);
+
+    if (link.important === false) {
+      instanceOfMainClass.setLinkAsImportant(link);
+    } else {
+      instanceOfMainClass.deleteElementFromImportantLinks(link);
+    }
+
+  });
+
   individuals.append(
     paramSvg,
     paramApi,
@@ -130,21 +164,22 @@ export function displayOneLink(link) {
   document.querySelector("#oneCategoryDisplayBox").append(individuals);
 }
 
-// Display of all Link elements
+// Render of all Link elements
 export function renderLinks() {
   instanceOfMainClass.getLinks().forEach(link => {
     displayOneLink(link);
   })
 }
 
-// OTHER /////////////////////////////////////////////
-// Buttons, search bars, style function;
+////////////////////////////////////////
+////////////// UTILITIES ///////////////
+////////////////////////////////////////
+// Buttons, search bars, style functions
 
 export function searchBarCategories() {
-  const searchBar = document.querySelector("#searchBar");
-
-  searchBar.addEventListener("input", (e) => {
+  document.querySelector("#searchBar").addEventListener("input", (e) => {
     e.preventDefault();
+
     instanceOfMainClass.setTextFilterCategories(e.target.value.toLowerCase());
     document.querySelector("#categories").innerHTML = "";
     renderCategories();
@@ -152,29 +187,39 @@ export function searchBarCategories() {
 }
 
 export function searchBarLinks() {
-  const searchBarLinks = document.querySelector("#searchBarLinks");
-
-  renderLinks();
-
-  searchBarLinks.addEventListener("input", (e) => {
+  document.querySelector("#searchBarLinks").addEventListener("input", (e) => {
     e.preventDefault();
+
     instanceOfMainClass.setTextFilterLinks(e.target.value.toLowerCase());
     document.querySelector("#oneCategoryDisplayBox").innerHTML = "";
     renderLinks();
   });
 }
 
-//btnClear for Category search
+// btnClear for Category search
 export function btnClearCategoriesFilterText() {
   let searchContent = document.querySelector("#searchBar");
   searchContent.value = "";
   document.querySelector("#categories").innerHTML = "";
   instanceOfMainClass.setTextFilterCategories('');
-  instanceOfMainClass.setSelectedCategory('');
-  renderCategories();
+  renderCategories()
 }
 
-//btnClear for Links search
+// Initialization of btnClear for Category
+export function btnClearForCategoriesFilterText() {
+  let searchBarCategories = document.querySelector('#searchBar');
+
+  document.querySelector("#btnClear").addEventListener("click", (e) => {
+    e.preventDefault();
+    if (searchBarCategories.value === '') {
+      document.querySelector("#btnClear").disabeled = true;
+    } else {
+      btnClearCategoriesFilterText();
+    }
+  });
+}
+
+// btnClear for Links search
 export function btnClearLinksFilterText() {
   let searchContent = document.querySelector("#searchBarLinks");
   searchContent.value = "";
@@ -183,35 +228,33 @@ export function btnClearLinksFilterText() {
   renderLinks();
 }
 
-// initialization of btnClear for Category
-export function btnClearForCategoriesFilterText() {
-  document.querySelector("#btnClear").addEventListener("click", (e) => {
-    e.preventDefault();
-    btnClearCategoriesFilterText();
-  });
-}
-
+// Implementation of btnClear for Links
 export function btnClearForLinksFilterText() {
+  let searchBarLinks = document.querySelector('#searchBarLinks');
+
   document.querySelector("#btnClearLinks").addEventListener("click", (e) => {
     e.preventDefault();
-    btnClearLinksFilterText();
+    if (searchBarLinks.value === '') {
+      document.querySelector("#btnClearLinks").disabeled = true;
+    } else {
+      btnClearLinksFilterText();
+    }
   });
 }
 
-// Change of color for Mark-As-Important feature
-function setStyleMarkedAsImportant(el) {
-  el.classList.toggle('mark-important');
+// Change of STAR color for Mark-As-Important feature
+export function setStyleMarkedAsImportant(element) {
+  element.classList.toggle('mark-important');
 }
 
 // Highlight chosen category
 function setStyleSelected(el) {
-  el.classList.add('category-main-chosen');
+  el.classList.add('category-main-chosen')
 }
 
+// Remove highlight from chosen category
 function reverseStyleSelected() {
-  if (instanceOfMainClass.selectedCategory !== '') {
-    document.getElementById(instanceOfMainClass.selectedCategory).parentElement.classList.remove('category-main-chosen');
+  if (instanceOfMainClass.getSelectegCategory() !== '') {
+    document.getElementById(instanceOfMainClass.getSelectegCategory()).classList.remove('category-main-chosen');
   }
 }
-
-
